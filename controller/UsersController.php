@@ -40,7 +40,8 @@ class UsersController
 
         if ($user) {
             $_SESSION['user'] = $user;
-            $this->presenter->render("view/HomeView.mustache");
+            $username = $_SESSION['user'][0]['username'];
+            $this->presenter->render("view/HomeView.mustache", ['username' => $username]);
         } else {
             $this->presenter->render("view/LoginErrorView.mustache");
         }
