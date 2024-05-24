@@ -14,7 +14,11 @@ class MustachePresenter{
     }
 
     public function render($contentFile , $data = array() ){
-        echo  $this->generateHtml($contentFile, $data);
+        try {
+            echo  $this->generateHtml($contentFile, $data);
+        } catch (Exception $e) {
+            echo 'Caught exception: ',  $e->getMessage(), "\n";
+        }
     }
 
     public function generateHtml($contentFile, $data = array()) {

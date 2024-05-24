@@ -1,5 +1,5 @@
 <?php
-
+error_reporting(E_ALL & ~E_DEPRECATED);
 /*
  * This file is part of Mustache.php.
  *

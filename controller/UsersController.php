@@ -14,12 +14,12 @@ class UsersController
 
     public function getLogin()
     {
-        $this->presenter->render("view/loginView.mustache");
+        $this->presenter->render("view/LoginView.mustache");
     }
 
     public function getRegister()
     {
-        $this->presenter->render("view/registerView.mustache");
+        $this->presenter->render("view/RegisterView.mustache");
     }
 
     public function postRegister()
@@ -29,33 +29,22 @@ class UsersController
 
         $this->model->register($username, $password);
 
-        $this->presenter->render("view/registerSuccessView.mustache");
+        $this->presenter->render("view/RegisterSuccessView.mustache");
     }
 
     public function postLogin()
     {
         $username = $_POST['username'];
         $password = $_POST['password'];
+        $user = $this->model->login($username, $password);
 
-        if ($this->model->login($username, $password)) {
-            $this->presenter->render("view/homeView.mustache");
-        } else {
-            $this->presenter->render("view/loginErrorView.mustache");
-        }
-    }
-
-    public function login($username, $password)
-    {
-        $user = $this->model->getUserByUsername($username);
-
-        if ($user && $password === $user['password']) {
-            // Iniciar sesión del usuario
+        if ($user) {
             $_SESSION['user'] = $user;
-            return true;
+            $this->presenter->render("view/HomeView.mustache");
+        } else {
+            $this->presenter->render("view/LoginErrorView.mustache");
         }
-
-        // Si los detalles no son correctos, devolver false
-        return false;
     }
+
 
 }

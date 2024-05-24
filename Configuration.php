@@ -17,7 +17,7 @@ class Configuration
     // CONTROLLERS
     public static function getUsersController()
     {
-        return new UsersController(self::getPresenter());
+        return new UsersController(self::getUsersModel(), self::getPresenter());
     }
 
     public static function getHomeController()
