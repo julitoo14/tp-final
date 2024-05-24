@@ -12,17 +12,17 @@ class UsersController
         $this->presenter = $presenter;
     }
 
-    public function getLogin()
+    public function getLogin() // Obtener la vista de Login
     {
         $this->presenter->render("view/LoginView.mustache");
     }
 
-    public function getRegister()
+    public function getRegister()   // Obtener la vista de Registro
     {
         $this->presenter->render("view/RegisterView.mustache");
     }
 
-    public function postRegister()
+    public function postRegister()  // Procesar el registro
     {
         $username = $_POST['username'];
         $password = $_POST['password'];
@@ -32,7 +32,7 @@ class UsersController
         $this->presenter->render("view/RegisterSuccessView.mustache");
     }
 
-    public function postLogin()
+    public function postLogin()  // Procesar el login
     {
         $username = $_POST['username'];
         $password = $_POST['password'];
