@@ -13,8 +13,14 @@
 <div class="w3-top">
     <div class="w3-bar w3-black w3-card">
         <a class="w3-bar-item w3-button w3-padding-large w3-hide-medium w3-hide-large w3-right" href="javascript:void(0)" onclick="myFunction()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
-        <a href="/tp-final/index.php" class="w3-bar-item w3-button w3-padding-large">Home</a>
-
+        {{#isLoggedIn}}
+            <a href="/tp-final/index.php" class="w3-bar-item w3-button w3-padding-large">Home</a>
+            <a href="/tp-final/index.php?controller=Users&action=logOut" class="w3-bar-item w3-button w3-padding-large">Cerrar sesión</a>
+        {{/isLoggedIn}}
+        {{^isLoggedIn}}
+            <a href="/tp-final/index.php?controller=Users&action=getLogin" class="w3-bar-item w3-button w3-padding-large">Iniciar sesión</a>
+            <a href="/tp-final/index.php?controller=Users&action=getRegister" class="w3-bar-item w3-button w3-padding-large">Registrarse</a>
+        {{/isLoggedIn}}
     </div>
 </div>
 

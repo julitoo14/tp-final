@@ -40,12 +40,17 @@ class UsersController
 
         if ($user) {
             $_SESSION['user'] = $user;
-            $username = $_SESSION['user'][0]['username'];
+            $username = isset($_SESSION['user']) && is_array($_SESSION['user']) ? $_SESSION['user'][0]['username'] : null;
             $this->presenter->render("view/HomeView.mustache", ['username' => $username]);
         } else {
             $this->presenter->render("view/LoginErrorView.mustache");
         }
     }
 
+    public function logOut()  // Procesar el logout
+    {
+        session_destroy();
+        header("Location: /tp-final/index.php");
+    }
 
 }

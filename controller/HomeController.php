@@ -12,7 +12,7 @@ class HomeController
 
     public function get()
     {
-        $username = $_SESSION['user'][0]['username'];
-        return $this->presenter->render("view/HomeView.mustache", ['username' => $username]);
+        $username = isset($_SESSION['user']) ? $_SESSION['user'][0]['username'] : null;
+        $this->presenter->render("view/HomeView.mustache", ['username' => $username]);
     }
 }

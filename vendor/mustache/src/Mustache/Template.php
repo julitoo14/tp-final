@@ -135,7 +135,7 @@ abstract class Mustache_Template
     /**
      * Helper method to prepare the Context stack.
      *
-     * Adds the Mustache HelperCollection to the stack's top context frame if helper are present.
+     * Adds the Mustache HelperCollection to the stack's top context frame if helpers are present.
      *
      * @param mixed $context Optional first context frame (default: null)
      *
@@ -143,7 +143,7 @@ abstract class Mustache_Template
      */
     protected function prepareContextStack($context = null)
     {
-        $stack = new Mustache_Context();
+        $stack = new Mustache_Context(null, $this->mustache->useBuggyPropertyShadowing());
 
         $helpers = $this->mustache->getHelpers();
         if (!$helpers->isEmpty()) {

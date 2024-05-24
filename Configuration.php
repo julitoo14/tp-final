@@ -6,7 +6,6 @@ include_once ("model/UsersModel.php");
 
 include_once ("helper/Database.php");
 include_once ("helper/Router.php");
-include_once ("helper/Presenter.php");
 include_once ("helper/MustachePresenter.php");
 
 include_once('vendor/mustache/src/Mustache/Autoloader.php');
