@@ -15,7 +15,7 @@ class UsersModel
             return false;
         }
 
-        $stmt = $this->database->prepare("INSERT INTO `usuarios`(`username`, `password`, `email`, `name`, `surname`) VALUES (?, ?, ?, ?, ?)");
+        $stmt = $this->database->prepare("INSERT INTO `USUARIOS`(`USERNAME`, `PASSWORD`, `EMAIL`, `NAME`, `SURNAME`) VALUES (?, ?, ?, ?, ?)");
         $this->database->execute($stmt, ["sssss", $username, $password, $email, $name, $surname]);
         return true;
     }

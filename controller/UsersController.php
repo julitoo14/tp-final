@@ -36,8 +36,6 @@ class UsersController
         } else {
             $this->presenter->render("view/RegisterView.mustache", ['error' => $_SESSION['error']]);
         }
-
-        $this->presenter->render("view/RegisterSuccessView.mustache");
     }
 
     public function postLogin()  // Procesar el login
