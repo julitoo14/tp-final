@@ -26,17 +26,25 @@ class UsersController
     {
         $username = $_POST['username'];
         $password = $_POST['password'];
+        $surname = $_POST['surname'];
+        $name = $_POST['name'];
+        $email = $_POST['email'];
+        $_SESSION['error'] = "";
 
-        $this->model->register($username, $password);
+        if($this->model->register($username, $password, $email, $name, $surname)){
+            $this->presenter->render("view/RegisterSuccessView.mustache");
+        } else {
+            $this->presenter->render("view/RegisterView.mustache", ['error' => $_SESSION['error']]);
+        }
 
         $this->presenter->render("view/RegisterSuccessView.mustache");
     }
 
     public function postLogin()  // Procesar el login
     {
-        $username = $_POST['username'];
+        $usernameOrEmail = $_POST['username'];
         $password = $_POST['password'];
-        $user = $this->model->login($username, $password);
+        $user = $this->model->login($usernameOrEmail, $password);
 
         if ($user) {
             $_SESSION['user'] = $user;
@@ -46,6 +54,13 @@ class UsersController
             $_SESSION['error'] = "Usuario o contraseña incorrectos";
             $this->presenter->render("view/LoginView.mustache", ['error' => $_SESSION['error']]);
         }
+    }
+
+    public function getProfile()  // Obtener la vista de Perfil
+    {
+        $username = isset($_SESSION['user']) && is_array($_SESSION['user']) ? $_SESSION['user'][0]['username'] : null;
+        $user = $this->model->getUserByUsername($username);
+        $this->presenter->render("view/ProfileView.mustache", ['user' => $user]);
     }
 
     public function logOut()  // Procesar el logout

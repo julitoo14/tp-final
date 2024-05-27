@@ -8,18 +8,34 @@ class UsersModel
         $this->database = $database;
     }
 
-    public function register($username, $password)
+    public function register($username, $password, $email, $name, $surname)
     {
-        $this->database->execute("INSERT INTO `usuarios`(`username`, `password`) VALUES ('" . $username ."','" . $password . "')");
+        if ($this->userExists($username, $email)) {
+            $_SESSION['error'] = "El usuario o email ya existe";
+            return false;
+        }
+
+        $stmt = $this->database->prepare("INSERT INTO `usuarios`(`username`, `password`, `email`, `name`, `surname`) VALUES (?, ?, ?, ?, ?)");
+        $this->database->execute($stmt, ["sssss", $username, $password, $email, $name, $surname]);
+        return true;
     }
 
-    public function login($username, $password)
+    public function login($usernameOrEmail, $password)
     {
-        return $this->database->query("SELECT * FROM USUARIOS WHERE USERNAME = '$username' AND PASSWORD = '$password'");
+        $stmt = $this->database->prepare("SELECT * FROM USUARIOS WHERE (USERNAME = ? OR EMAIL = ?) AND PASSWORD = ?");
+        return $this->database->execute($stmt, ["sss", $usernameOrEmail, $usernameOrEmail, $password]);
+    }
+
+    public function userExists($username, $email)
+    {
+        $stmt = $this->database->prepare("SELECT * FROM USUARIOS WHERE USERNAME = ? OR EMAIL = ?");
+        $result = $this->database->execute($stmt, ["ss", $username, $email]);
+        return !empty($result);
     }
 
     public function getUserByUsername($username)
     {
-        return $this->database->query("SELECT * FROM USUARIOS WHERE USERNAME = '$username'");
+        $stmt = $this->database->prepare("SELECT * FROM USUARIOS WHERE USERNAME = ?");
+        return $this->database->execute($stmt, ["s", $username]);
     }
 }

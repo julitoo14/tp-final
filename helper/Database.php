@@ -18,9 +18,23 @@ class Database
         return mysqli_fetch_all($result, MYSQLI_ASSOC);
     }
 
-    public function execute($sql)
-    {
-        mysqli_query($this->conn, $sql);
+    public function prepare($sql){
+        $stmt = $this->conn->prepare($sql);
+        return $stmt;
+    }
+
+    public function execute($stmt, $params = null){
+        if ($params) {
+            $stmt->bind_param(...$params);
+        }
+        $stmt->execute();
+        $result = $stmt->get_result();
+        // si es un select, es decir un conjunto de resultados,  devuelvo el resultado, sino devuelvo true o false
+        if ($result instanceof mysqli_result) {
+            return $result->fetch_all(MYSQLI_ASSOC);
+        } else {
+            return $result;
+        }
     }
 
     public function __destruct()
