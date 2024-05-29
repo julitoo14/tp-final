@@ -31,10 +31,33 @@ class UsersController
         $email = $_POST['email'];
         $_SESSION['error'] = "";
 
-        if($this->model->register($username, $password, $email, $name, $surname)){
-            $this->presenter->render("view/RegisterSuccessView.mustache");
+        $hash = md5($username . $email . date("Y-m-d"));
+
+        if($this->model->register($username, $password, $email, $name, $surname, $hash)){
+            $user = $this->model->getUserByUsername($username);
+            $id = $user[0]['_id'];
+            $link = "/Users/validateEmail?id=" . $id . "&hash=" . $hash;
+            $this->presenter->render("view/RegisterSuccessView.mustache", ['link' => $link]);
         } else {
             $this->presenter->render("view/RegisterView.mustache", ['error' => $_SESSION['error']]);
+        }
+    }
+
+    public function validateEmail()  // Validar el correo electrónico
+    {
+        $userId = $_GET['id'];
+        $validationCode = $_GET['hash'];
+
+        $user = $this->model->getUserById($userId);
+
+        if ($user && $user[0]['hash'] == $validationCode) {
+            // El código de validación coincide, marcar el correo electrónico como validado
+            $this->model->setEmailValidated($userId);
+            $_SESSION['message'] = "Correo electrónico validado correctamente";
+            $this->presenter->render("view/LoginView.mustache", ['message' => $_SESSION['message']]);
+
+        } else {
+            echo "El código de validación no coincide";
         }
     }
 
@@ -64,7 +87,7 @@ class UsersController
     public function logOut()  // Procesar el logout
     {
         session_destroy();
-        header("Location: /tp-final/index.php");
+        header("Location: /Users/getLogin");
     }
 
 }
