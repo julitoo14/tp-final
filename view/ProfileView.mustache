@@ -2,6 +2,8 @@
     <h2 class="w3-center">Perfil de Usuario</h2>
     {{#user}}
     <div class="w3-section">
+        <label for="profile_pic"><b>Foto de Perfil</b></label>
+        <img id="profile_pic" class="profile-pic" src="data:image/jpeg;base64,{{profile_pic}}">
         <label for="username"><b>Usuario</b></label>
         <p id="username">{{username}}</p>
         <label for="email"><b>Email</b></label>
@@ -10,6 +12,11 @@
         <p id="name">{{name}}</p>
         <label for="surname"><b>Apellidos</b></label>
         <p id="surname">{{surname}}</p>
+        <label for="birth_year"><b>Año de nacimiento</b></label>
+        <p id="birth_year">{{birth_year}}</p>
+        <label for="gender"><b>Género</b></label>
+        <p id="gender">{{gender}}</p>
+
     </div>
     {{/user}}
 </div>

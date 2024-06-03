@@ -8,15 +8,15 @@ class UsersModel
         $this->database = $database;
     }
 
-    public function register($username, $password, $email, $name, $surname, $hash)
+    public function register($username, $password, $email, $name, $surname, $hash, $profile_pic, $birth_year, $gender)
     {
         if ($this->userExists($username, $email)) {
             $_SESSION['error'] = "El usuario o email ya existe";
             return false;
         }
 
-        $stmt = $this->database->prepare("INSERT INTO `USUARIOS`(`USERNAME`, `PASSWORD`, `EMAIL`, `NAME`, `SURNAME`,`HASH`) VALUES (?, ?, ?, ?, ?, ?)");
-        $this->database->execute($stmt, ["ssssss", $username, $password, $email, $name, $surname, $hash]);
+        $stmt = $this->database->prepare("INSERT INTO `USUARIOS`(`USERNAME`, `PASSWORD`, `EMAIL`, `NAME`, `SURNAME`,`HASH`,`PROFILE_PIC`,`BIRTH_YEAR`, `GENDER`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $this->database->execute($stmt, ["sssssssis", $username, $password, $email, $name, $surname, $hash, $profile_pic, $birth_year, $gender]);
         return true;
     }
 

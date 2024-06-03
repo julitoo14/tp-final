@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:8889
--- Generation Time: May 29, 2024 at 01:59 AM
--- Server version: 5.7.39
--- PHP Version: 8.2.0
+-- Servidor: 127.0.0.1
+-- Tiempo de generación: 03-06-2024 a las 04:31:35
+-- Versión del servidor: 10.4.32-MariaDB
+-- Versión de PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,52 +18,57 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `tpFinal`
+-- Base de datos: `tpfinal`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `USUARIOS`
+-- Estructura de tabla para la tabla `usuarios`
 --
 
-CREATE TABLE `USUARIOS` (
+CREATE TABLE `usuarios` (
+  `_id` int(11) NOT NULL,
   `username` varchar(20) NOT NULL,
   `password` varchar(20) NOT NULL,
-  `_id` int(11) NOT NULL,
-  `email` varchar(255) DEFAULT NULL,
+  `email` varchar(255) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `surname` varchar(255) DEFAULT NULL,
-  `EMAIL_VALIDATED` tinyint(1) NOT NULL DEFAULT '0',
-  `hash` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `EMAIL_VALIDATED` tinyint(1) NOT NULL DEFAULT 0,
+  `hash` varchar(255) NOT NULL,
+  `profile_pic` longblob DEFAULT NULL,
+  `birth_year` year(4) DEFAULT NULL,
+  `gender` varchar(20) DEFAULT NULL,
+  `country` varchar(255) DEFAULT NULL,
+  `city` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `USUARIOS`
+-- Volcado de datos para la tabla `usuarios`
 --
 
-INSERT INTO `USUARIOS` (`username`, `password`, `_id`, `email`, `name`, `surname`, `EMAIL_VALIDATED`, `hash`) VALUES
-('julito', '1234', 17, 'juuligarcia2208@gmail.com', 'Julian', 'Garcia', 1, '41f6fcf410fb86342af2e3311342c79c');
+INSERT INTO `usuarios` (`_id`, `username`, `password`, `email`, `name`, `surname`, `EMAIL_VALIDATED`, `hash`, `profile_pic`, `birth_year`, `gender`, `country`, `city`) VALUES
+(17, 'julito', '1234', 'juuligarcia2208@gmail.com', 'Julian', 'Garcia', 1, '41f6fcf410fb86342af2e3311342c79c', NULL, NULL, NULL, NULL, NULL);
 
 --
--- Indexes for dumped tables
+-- Índices para tablas volcadas
 --
 
 --
--- Indexes for table `USUARIOS`
+-- Indices de la tabla `usuarios`
 --
-ALTER TABLE `USUARIOS`
+ALTER TABLE `usuarios`
   ADD PRIMARY KEY (`_id`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT de las tablas volcadas
 --
 
 --
--- AUTO_INCREMENT for table `USUARIOS`
+-- AUTO_INCREMENT de la tabla `usuarios`
 --
-ALTER TABLE `USUARIOS`
-  MODIFY `_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+ALTER TABLE `usuarios`
+  MODIFY `_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -29,11 +29,15 @@ class UsersController
         $surname = $_POST['surname'];
         $name = $_POST['name'];
         $email = $_POST['email'];
+        $rutaProfilePic = $_FILES['profile_pic']['tmp_name'];
+        $contenidoProfilePic = file_get_contents($rutaProfilePic) ? file_get_contents($rutaProfilePic) : null;
+        $birth_year = $_POST['birth_year'];
+        $gender = $_POST['gender'];
         $_SESSION['error'] = "";
 
         $hash = md5($username . $email . date("Y-m-d"));
 
-        if($this->model->register($username, $password, $email, $name, $surname, $hash)){
+        if($this->model->register($username, $password, $email, $name, $surname, $hash, $contenidoProfilePic, $birth_year, $gender)) {
             $user = $this->model->getUserByUsername($username);
             $id = $user[0]['_id'];
             $link = "/Users/validateEmail?id=" . $id . "&hash=" . $hash;
@@ -81,6 +85,7 @@ class UsersController
     {
         $username = isset($_SESSION['user']) && is_array($_SESSION['user']) ? $_SESSION['user'][0]['username'] : null;
         $user = $this->model->getUserByUsername($username);
+        $user[0]['profile_pic'] = base64_encode($user[0]['profile_pic']); // Convertir la imagen a base64 para mostrarla en la vista
         $this->presenter->render("view/ProfileView.mustache", ['user' => $user]);
     }
 
