@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/public/style.css">
 
 <body style="display: flex">
 
@@ -17,7 +17,7 @@
         {{#isLoggedIn}}
             <a href="/Home/get" class="w3-bar-item w3-button w3-padding-large">Home</a>
             <a href="/Users/getProfile" class="w3-bar-item w3-button w3-padding-large">Perfil</a>
-            <a href="/Users/logOut" class="w3-bar-item w3-button w3-padding-large">Cerrar sesión</a>
+            <a href="/Users/logOut" class="w3-bar-item w3-button w3-padding-large" id="cerrarSesion">Cerrar sesión</a>
         {{/isLoggedIn}}
         {{^isLoggedIn}}
             <a href="/Users/getLogin" class="w3-bar-item w3-button w3-padding-large">Iniciar sesión</a>
