@@ -22,28 +22,43 @@ class UsersController
         $this->presenter->render("view/RegisterView.mustache");
     }
 
-    public function postRegister()  // Procesar el registro
-    {
+    public function postRegister() {
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+
         $username = $_POST['username'];
         $password = $_POST['password'];
+        $rep_password = $_POST['rep_password'];
         $surname = $_POST['surname'];
         $name = $_POST['name'];
         $email = $_POST['email'];
         $rutaProfilePic = $_FILES['profile_pic']['tmp_name'];
-        $contenidoProfilePic = file_get_contents($rutaProfilePic) ? file_get_contents($rutaProfilePic) : null;
+        $contenidoProfilePic = isset($rutaProfilePic) && $rutaProfilePic != '' ? file_get_contents($rutaProfilePic) : null; // Verifica si se proporciona una imagen
         $birth_year = $_POST['birth_year'];
         $gender = $_POST['gender'];
-        $_SESSION['error'] = "";
+        $country = $_POST['country'];
+        $city = $_POST['city'];
 
         $hash = md5($username . $email . date("Y-m-d"));
 
-        if($this->model->register($username, $password, $email, $name, $surname, $hash, $contenidoProfilePic, $birth_year, $gender)) {
+        // Verifica si la imagen es nula o vacía
+        if ($contenidoProfilePic === null || $rutaProfilePic == '') {
+            $_SESSION['error'] = "Debe cargar una foto de perfil válida";
+            $this->presenter->render("view/RegisterView.mustache", ['error' => $_SESSION['error']]); // Redirige de vuelta al formulario
+            exit();
+        }
+
+        if ($this->model->register($username, $password, $rep_password, $email, $name, $surname, $hash, $contenidoProfilePic, $birth_year, $gender, $country, $city)) {
             $user = $this->model->getUserByUsername($username);
             $id = $user[0]['_id'];
+            $hash = md5($username . $email . date("Y-m-d"));
             $link = "/Users/validateEmail?id=" . $id . "&hash=" . $hash;
             $this->presenter->render("view/RegisterSuccessView.mustache", ['link' => $link]);
         } else {
-            $this->presenter->render("view/RegisterView.mustache", ['error' => $_SESSION['error']]);
+            $_SESSION['error'] = "Ocurrió un error al registrar al usuario";
+            $this->presenter->render("view/RegisterView.mustache", ['error' => $_SESSION['error']]); // Redirige de vuelta al formulario en caso de error
+            exit();
         }
     }
 

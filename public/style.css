@@ -18,3 +18,8 @@
     top: 46%;
     left: 50%;
 }
+
+ #map {
+     height: 400px;
+     width: 100%;
+ }

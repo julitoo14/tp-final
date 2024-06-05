@@ -8,15 +8,24 @@ class UsersModel
         $this->database = $database;
     }
 
-    public function register($username, $password, $email, $name, $surname, $hash, $profile_pic, $birth_year, $gender)
+    public function register($username, $password, $rep_password, $email, $name, $surname, $hash, $profile_pic, $birth_year, $gender, $country, $city)
     {
         if ($this->userExists($username, $email)) {
             $_SESSION['error'] = "El usuario o email ya existe";
             return false;
         }
 
-        $stmt = $this->database->prepare("INSERT INTO `USUARIOS`(`USERNAME`, `PASSWORD`, `EMAIL`, `NAME`, `SURNAME`,`HASH`,`PROFILE_PIC`,`BIRTH_YEAR`, `GENDER`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $this->database->execute($stmt, ["sssssssis", $username, $password, $email, $name, $surname, $hash, $profile_pic, $birth_year, $gender]);
+        if ($password != $rep_password) {
+            $_SESSION['error'] = "Las contraseñas no coinciden";
+            return false;
+        }
+
+        if($profile_pic == null) {
+            $_SESSION['error'] = "Debe cargar una foto de perfil válida";
+        }
+
+        $stmt = $this->database->prepare("INSERT INTO `USUARIOS`(`USERNAME`, `PASSWORD`, `EMAIL`, `NAME`, `SURNAME`,`HASH`,`PROFILE_PIC`,`BIRTH_YEAR`, `GENDER`, `COUNTRY`, `CITY`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $this->database->execute($stmt, ["sssssssisss", $username, $password, $email, $name, $surname, $hash, $profile_pic, $birth_year, $gender, $country, $city]);
         return true;
     }
 

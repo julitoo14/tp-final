@@ -9,6 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $actionName = $_POST["action"];
 }
 
+
 if (!isset($_SESSION['user']) && $controllerName != "Users") {
     // Si el usuario no está logueado, redirige al controlador de inicio de sesión
     $controllerName = "Users";
