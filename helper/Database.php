@@ -23,6 +23,10 @@ class Database
         return $stmt;
     }
 
+    public function getInsertId() {
+        return $this->conn->insert_id;
+    }
+
     public function execute($stmt, $params = null){
         if ($params) {
             $stmt->bind_param(...$params);

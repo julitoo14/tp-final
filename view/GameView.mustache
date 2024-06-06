@@ -1,0 +1,22 @@
+<div class="w3-card-4">
+    <div class="w3-container w3-blue">
+        <h2>{{pregunta.texto}}</h2>
+    </div>
+    <div class="w3-container">
+        <form action="/index.php" method="post">
+            <ul>
+                {{#respuestas}}
+                    <li>
+                        <input type="radio" id="respuesta{{_id}}" name="respuestaId" value="{{_id}}">
+                        <label for="respuesta{{_id}}">{{texto}}</label>
+                    </li>
+                {{/respuestas}}
+            </ul>
+            <input type="hidden" name="preguntaId" value="{{pregunta._id}}">
+            <input type="hidden" name="controller" value="Game">
+            <input type="hidden" name="action" value="postAnswer">
+            <input type="submit" value="Enviar respuesta">
+        </form>
+    </div>
+    <div>PUNTAJE: {{puntos}}</div>
+</div>
