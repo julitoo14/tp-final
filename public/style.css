@@ -1,7 +1,7 @@
 #cerrarSesion{
     position: absolute;
     right: 0;
-
+    padding-bottom: 35px;
 }
 
 #cerrarSesion:hover{
@@ -23,3 +23,39 @@
      height: 400px;
      width: 100%;
  }
+
+#navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px; /* Espaciado a los lados */
+}
+
+.navbar-section {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-center {
+    display: flex;
+    justify-content: center;
+    flex-grow: 1;
+}
+
+#quizarg {
+    font-size: 45px;
+    margin: 0; /* Elimina márgenes para mejor alineación */
+    display: flex;
+    align-items: center;
+}
+
+#quizarg img {
+    margin-left: 10px;
+}
+
+#perfilnav,
+#homenav,
+#cerrarSesion {
+    padding-top: 32px;
+    padding-bottom: 33px;
+}
