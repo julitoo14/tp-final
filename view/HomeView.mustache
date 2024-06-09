@@ -1,3 +1,7 @@
 <h1 class="w3-center">Hola, {{username}}!</h1>
 <p class="w3-center">Te deseamos una gran experiencia.</p>
-<a href="/Game/startGame"><button>Jugar Partida</button></a>
+<a href="/index.php?controller=Game&action=startGame"><button>Jugar Partida</button></a>
+
+{{#puntaje}}
+    <p class="w3-center">Tu puntaje final es: {{puntaje}}</p>
+{{/puntaje}}

@@ -15,7 +15,6 @@ include_once('vendor/mustache/src/Mustache/Autoloader.php');
 
 class Configuration
 {
-
     // CONTROLLERS
     public static function getUsersController()
     {
@@ -24,14 +23,13 @@ class Configuration
 
     public static function getHomeController()
     {
-        return new HomeController(self::getPresenter());
+        return new HomeController(self::getPresenter(), self::getPartidasModel());
     }
 
     public static function getGameController()
     {
         return new GameController(self::getPresenter(), self::getPreguntasModel(), self::getPartidasModel());
     }
-
 
     // MODELS
     private static function getUsersModel()
@@ -60,7 +58,6 @@ class Configuration
         $config = self::getConfig();
         return new Database($config["servername"], $config["username"], $config["password"], $config["dbname"]);
     }
-
 
     public static function getRouter()
     {

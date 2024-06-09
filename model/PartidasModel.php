@@ -35,4 +35,17 @@ class PartidasModel
         $this->database->execute($stmt, ["ii", $puntos, $partidaId]);
     }
 
+    public function finalizarPartida($partidaId, $puntos)
+    {
+        $stmt = $this->database->prepare("UPDATE PARTIDAS SET puntaje = ?, finalizada = 1 WHERE _ID = ?");
+        $this->database->execute($stmt, ["ii", $puntos, $partidaId]);
+    }
+
+
+    public function getPuntajeFinal($userId)
+    {
+        $stmt = $this->database->prepare("SELECT puntaje FROM PARTIDAS WHERE USER_ID = ? AND finalizada = 1 ORDER BY _ID DESC LIMIT 1");
+        return $this->database->execute($stmt, ["i", $userId]);
+    }
+
 }
