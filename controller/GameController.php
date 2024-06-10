@@ -54,9 +54,16 @@ class GameController
         // Registra la pregunta como jugada
         $this->preguntasModel->addPreguntaJugada($userId, $preguntaId, $esCorrecta);
 
-        // Redirige al usuario a la siguiente pregunta o muestra los resultados
-        // ...
-        $this->getQuestion();
+        if ($esCorrecta) {
+            // Redirigir a la siguiente pregunta
+            $this->getQuestion();
+        } else {
+            // Redirigir al lobby con mensaje de pérdida y puntaje
+            $this->presenter->render("view/HomeView.mustache", [
+                'mensaje' => 'Perdiste',
+                'puntaje' => $puntos
+            ]);
+        }
     }
 
 }
