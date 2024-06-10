@@ -24,6 +24,22 @@ class PreguntasModel
         return $preguntaRandom;
     }
 
+    public function getColorCategoria($preguntaId) {
+
+        $stmt = $this->database->prepare("
+        SELECT c.colorCategoria 
+        FROM preguntas p
+        JOIN categorias c ON p.id_categoria = c.id
+        WHERE p._id = ?
+    ");
+        $stmt->bind_param("i", $preguntaId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $colorCategoria = $result->fetch_assoc();
+
+        return $colorCategoria ? $colorCategoria['colorCategoria'] : null;
+    }
+
     public function addPreguntaJugada($userId, $preguntaId, $esCorrecta)
     {
         $stmt = $this->database->prepare("INSERT INTO preguntas_jugadas (USER_ID, PREGUNTA_ID, ES_CORRECTA) VALUES (?, ?, ?)");
