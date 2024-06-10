@@ -13,20 +13,29 @@ class GameController
         $this->partidasModel = $partidasModel;
 
     }
-
-
     public function getQuestion()
     {
-        //Obtengo el id del usuario logueado
+        // Obtengo el id del usuario logueado
         $userId = isset($_SESSION['user']) ? $_SESSION['user'][0]['_id'] : null;
-        //Obtengo el id de la partida actual y luego el puntaje de la misma
+        // Obtengo el id de la partida actual y luego el puntaje de la misma
         $partidaId = $_SESSION['partidaId'];
         $puntos = $this->partidasModel->getPuntaje($partidaId);
+        // Obtengo una pregunta aleatoria
         $preguntaRandom = $this->preguntasModel->getPreguntaRandom($userId);
-        $respuestas = $this->preguntasModel->getRespuestas($preguntaRandom['_id']);
-        $this->presenter->render("view/GameView.mustache", ['pregunta' => $preguntaRandom, 'respuestas' => $respuestas, 'puntos' => $puntos[0]['puntaje']]);
+        // Obtengo el ID de la pregunta aleatoria
+        $preguntaId = $preguntaRandom['_id'];
+        // Obtengo el color de la categoría de la pregunta
+        $colorCategoria = $this->preguntasModel->getColorCategoria($preguntaId);
+        // Obtengo las respuestas de la pregunta
+        $respuestas = $this->preguntasModel->getRespuestas($preguntaId);
+        // Renderizo la vista pasando los datos necesarios
+        $this->presenter->render("view/GameView.mustache", [
+            'colorCategoria' => $colorCategoria,
+            'pregunta' => $preguntaRandom,
+            'respuestas' => $respuestas,
+            'puntos' => $puntos[0]['puntaje']
+        ]);
     }
-
     public function startGame(){
         $userId = isset($_SESSION['user']) ? $_SESSION['user'][0]['_id'] : null;
         $partidaId = $this->partidasModel->addPartida($userId);
