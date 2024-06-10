@@ -21,7 +21,7 @@ class HomeController
 
         $this->presenter->render("view/HomeView.mustache", [
             'username' => $username,
-            'puntaje' => isset($puntajeFinal[0]['puntaje']) ? $puntajeFinal[0]['puntaje'] : null
+            'puntaje' => $puntajeFinal[0]['puntaje'] ?? null
         ]);
     }
 

@@ -35,10 +35,28 @@ class GameController
     public function startGame()
     {
         $userId = isset($_SESSION['user']) ? $_SESSION['user'][0]['_id'] : null;
+        $partida = $this->partidasModel->getUltimaPartida($userId);
+
+        // Verificar si existe una partida en curso y si ya ha sido finalizada
+        if ($partida && $partida['finalizada'] == 1) {
+            // Si la partida está finalizada, no se permite comenzar una nueva
+            $_SESSION['mensajeError'] = "Ya has completado todas las preguntas.";
+            header("Location: index.php?controller=Home&action=get");
+            exit;
+        } elseif ($partida) {
+            // Si el usuario tiene una partida en curso, se redirige a la página de juego
+            $_SESSION['partidaId'] = $partida['_id'];
+            header("Location: index.php?controller=Game&action=getQuestion");
+            exit;
+        }
+
+        // Si el usuario no tiene una partida en curso ni una partida finalizada, se inicia una nueva partida
         $partidaId = $this->partidasModel->addPartida($userId);
         $_SESSION['partidaId'] = $partidaId;
-        $this->getQuestion();
+        header("Location: index.php?controller=Game&action=getQuestion");
+        exit;
     }
+
 
     public function postAnswer()
     {

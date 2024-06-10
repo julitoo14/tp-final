@@ -41,11 +41,15 @@ class PartidasModel
         $this->database->execute($stmt, ["ii", $puntos, $partidaId]);
     }
 
-
     public function getPuntajeFinal($userId)
     {
         $stmt = $this->database->prepare("SELECT puntaje FROM PARTIDAS WHERE USER_ID = ? AND finalizada = 1 ORDER BY _ID DESC LIMIT 1");
         return $this->database->execute($stmt, ["i", $userId]);
     }
 
+    public function getUltimaPartida($userId)
+    {
+        $stmt = $this->database->prepare("SELECT * FROM PARTIDAS WHERE USER_ID = ? ORDER BY _ID DESC LIMIT 1");
+        return $this->database->execute($stmt, ["i", $userId]);
+    }
 }

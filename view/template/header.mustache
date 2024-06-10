@@ -17,18 +17,25 @@
 <div class="w3-top">
     <div class="w3-bar w3-black w3-card">
         <a class="w3-bar-item w3-button w3-padding-large w3-hide-medium w3-hide-large w3-right" href="javascript:void(0)" onclick="myFunction()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
-        {{#isLoggedIn}}
-            <a href="/Home/get" class="w3-bar-item w3-button w3-padding-large">Home</a>
-            <a href="/Users/getProfile" class="w3-bar-item w3-button w3-padding-large">Perfil</a>
-            <a href="/Users/logOut" class="w3-bar-item w3-button w3-padding-large" id="cerrarSesion">Cerrar sesión</a>
-        {{/isLoggedIn}}
-        {{^isLoggedIn}}
-            <a href="/Users/getLogin" class="w3-bar-item w3-button w3-padding-large">Iniciar sesión</a>
-            <a href="/Users/getRegister" class="w3-bar-item w3-button w3-padding-large">Registrarse</a>
-        {{/isLoggedIn}}
+
+        <div class="w3-bar-item w3-padding-large">
+            {{#isLoggedIn}}
+                <a href="/Home/get" class="w3-bar-item w3-button w3-padding-large">
+                    <img src="/public/logo.png" alt="Logo" style="height: 30px; width: auto;">
+                    QuizArg
+                </a>
+                <a href="/Users/getProfile" class="w3-bar-item w3-button w3-padding-large">Perfil</a>
+                <a href="/Users/logOut" class="w3-bar-item w3-button w3-padding-large" id="cerrarSesion">Cerrar sesión</a>
+            {{/isLoggedIn}}
+            {{^isLoggedIn}}
+                <a href="/Users/getLogin" class="w3-bar-item w3-button w3-padding-large">Iniciar sesión</a>
+                <a href="/Users/getRegister" class="w3-bar-item w3-button w3-padding-large">Registrarse</a>
+            {{/isLoggedIn}}
+        </div>
     </div>
 </div>
 
 
+
 <!-- Page content -->
-<div class="w3-content  w3-half" style="width: 100%; margin: 46px auto auto;">
+<div class="w3-content  w3-half" style="width: 100%; margin: 15vh auto ;">
