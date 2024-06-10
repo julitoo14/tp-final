@@ -15,7 +15,6 @@ class GameController
         $this->usersModel = $usersModel;
     }
 
-
     public function getQuestion()
     {
         //Obtengo el id del usuario logueado
@@ -24,9 +23,21 @@ class GameController
         $partidaId = $_SESSION['partidaId'];
         $puntos = $this->partidasModel->getPuntaje($partidaId);
         $promedioJugador = $this->usersModel->getPromedioAciertos($userId);
-        $preguntaRandom = $this->preguntasModel->getPreguntaRandom($userId, $promedioJugador);
-        $respuestas = $this->preguntasModel->getRespuestas($preguntaRandom['_id']);
-        $this->presenter->render("view/GameView.mustache", ['pregunta' => $preguntaRandom, 'respuestas' => $respuestas, 'puntos' => $puntos[0]['puntaje']]);
+        // Obtengo una pregunta aleatoria
+        $preguntaRandom = $this->preguntasModel->getPreguntaRandom($userId);
+        // Obtengo el ID de la pregunta aleatoria
+        $preguntaId = $preguntaRandom['_id'];
+        // Obtengo el color de la categoría de la pregunta
+        $colorCategoria = $this->preguntasModel->getColorCategoria($preguntaId);
+        // Obtengo las respuestas de la pregunta
+        $respuestas = $this->preguntasModel->getRespuestas($preguntaId);
+        // Renderizo la vista pasando los datos necesarios
+        $this->presenter->render("view/GameView.mustache", [
+            'colorCategoria' => $colorCategoria,
+            'pregunta' => $preguntaRandom,
+            'respuestas' => $respuestas,
+            'puntos' => $puntos[0]['puntaje']
+        ]);
     }
 
     public function startGame(){
@@ -65,10 +76,16 @@ class GameController
         // Registra la pregunta como jugada
         $this->preguntasModel->addPreguntaJugada($userId, $preguntaId, $esCorrecta);
 
-
-        // Redirige al usuario a la siguiente pregunta o muestra los resultados
-        // ...
-        $this->getQuestion();
+        if ($esCorrecta) {
+            // Redirigir a la siguiente pregunta
+            $this->getQuestion();
+        } else {
+            // Redirigir al lobby con mensaje de pérdida y puntaje
+            $this->presenter->render("view/HomeView.mustache", [
+                'mensaje' => 'Perdiste',
+                'puntaje' => $puntos
+            ]);
+        }
     }
 
 }

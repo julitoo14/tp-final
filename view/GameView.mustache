@@ -1,7 +1,14 @@
+<script src="/public/cronometro.js"></script>
 <div class="w3-card-4">
-    <div class="w3-container w3-blue">
+    <div class="" style="background:{{colorCategoria}}">
         <h2>{{pregunta.texto}}</h2>
     </div>
+    <div class="timer-container">
+        <span id="timer">20</span>
+        <div class="time-bar">
+            <div class="time-bar-fill" id="time-bar-fill"></div>
+        </div>
+
     <div class="w3-container">
         <form action="/index.php" method="post">
             <ul>
@@ -19,4 +26,5 @@
         </form>
     </div>
     <div>PUNTAJE: {{puntos}}</div>
+</div>
 </div>

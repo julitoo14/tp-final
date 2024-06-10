@@ -23,8 +23,8 @@ class PreguntasModel
 
         // Traigo una pregunta que el usuario aún no ha respondido y que se encuentra en el rango de dificultad adecuado
         $stmt = $this->database->prepare("
-        SELECT * FROM PREGUNTAS
-        WHERE _ID NOT IN (
+        SELECT * FROM preguntas 
+        WHERE _id NOT IN (
             SELECT PREGUNTA_ID FROM PREGUNTAS_JUGADAS WHERE USER_ID = ?
         ) AND DIFICULTAD >= ? AND DIFICULTAD <= ?
     ");
@@ -51,6 +51,22 @@ class PreguntasModel
         $preguntaRandom = $preguntasSinResponder[array_rand($preguntasSinResponder)];
 
         return $preguntaRandom;
+    }
+
+    public function getColorCategoria($preguntaId) {
+
+        $stmt = $this->database->prepare("
+        SELECT c.colorCategoria 
+        FROM preguntas p
+        JOIN categorias c ON p.id_categoria = c.id
+        WHERE p._id = ?
+    ");
+        $stmt->bind_param("i", $preguntaId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $colorCategoria = $result->fetch_assoc();
+
+        return $colorCategoria ? $colorCategoria['colorCategoria'] : null;
     }
 
     public function agregarVezJugada($preguntaId){
@@ -113,12 +129,12 @@ class PreguntasModel
     }
 
     public function getRespuestas($preguntaId){
-        $stmt = $this->database->prepare("SELECT * FROM RESPUESTAS WHERE ID_PREGUNTA = ?");
+        $stmt = $this->database->prepare("SELECT * FROM respuestas WHERE ID_PREGUNTA = ?");
         return $this->database->execute($stmt, ["i", $preguntaId]);
     }
 
     public function comprobarRespuesta($respuestaId){
-        $stmt = $this->database->prepare("SELECT es_correcta FROM RESPUESTAS WHERE _ID = ?");
+        $stmt = $this->database->prepare("SELECT es_correcta FROM respuestas WHERE _ID = ?");
         $result = $this->database->execute($stmt, ["i", $respuestaId]);
 
         // Si la consulta devuelve al menos un resultado y es_correcta es 1, entonces la respuesta es correcta

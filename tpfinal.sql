@@ -287,7 +287,7 @@ ALTER TABLE `usuarios`
 -- Constraints for table `PARTIDAS`
 --
 ALTER TABLE `PARTIDAS`
-  ADD CONSTRAINT `partidas_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `USUARIOS` (`_id`);
+  ADD CONSTRAINT `partidas_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `usuarios` (`_id`);
 
 --
 -- Constraints for table `preguntas`
@@ -299,8 +299,8 @@ ALTER TABLE `preguntas`
 -- Constraints for table `PREGUNTAS_JUGADAS`
 --
 ALTER TABLE `PREGUNTAS_JUGADAS`
-  ADD CONSTRAINT `preguntas_jugadas_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `USUARIOS` (`_id`),
-  ADD CONSTRAINT `preguntas_jugadas_ibfk_2` FOREIGN KEY (`pregunta_id`) REFERENCES `PREGUNTAS` (`_id`);
+  ADD CONSTRAINT `preguntas_jugadas_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `usuarios` (`_id`),
+  ADD CONSTRAINT `preguntas_jugadas_ibfk_2` FOREIGN KEY (`pregunta_id`) REFERENCES `preguntas` (`_id`);
 
 --
 -- Constraints for table `respuestas`
