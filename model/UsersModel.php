@@ -35,6 +35,45 @@ class UsersModel
         return $this->database->execute($stmt, ["sss", $usernameOrEmail, $usernameOrEmail, $password]);
     }
 
+    public function agregarPreguntaJugada($userId)
+    {
+        $stmt = $this->database->prepare("UPDATE USUARIOS SET PREGUNTAS_JUGADAS = PREGUNTAS_JUGADAS + 1 WHERE _ID = ?");
+        $this->database->execute($stmt, ["i", $userId]);
+
+        $this->actualizarDificultad($userId);
+    }
+
+    public function agregarPreguntaCorrecta($userId)
+    {
+        $stmt = $this->database->prepare("UPDATE USUARIOS SET PREGUNTAS_ACERTADAS = PREGUNTAS_ACERTADAS + 1 WHERE _ID = ?");
+        $this->database->execute($stmt, ["i", $userId]);
+
+        $this->actualizarDificultad($userId);
+    }
+
+    public function actualizarDificultad($userId){
+        // Obtén el número de veces que el usuario ha respondido preguntas
+        $stmt = $this->database->prepare("SELECT PREGUNTAS_JUGADAS FROM USUARIOS WHERE _ID = ?");
+        $preguntasJugadas = $this->database->execute($stmt, ["i", $userId])[0]['PREGUNTAS_JUGADAS'];
+
+        // Obtén el número de veces que el usuario ha respondido correctamente
+        $stmt = $this->database->prepare("SELECT PREGUNTAS_ACERTADAS FROM USUARIOS WHERE _ID = ?");
+        $preguntasAcertadas = $this->database->execute($stmt, ["i", $userId])[0]['PREGUNTAS_ACERTADAS'];
+
+        // Calcula el porcentaje de aciertos
+        $porcentajeAciertos = ($preguntasAcertadas / $preguntasJugadas) * 100;
+
+        // Actualiza la dificultad del usuario en la base de datos
+        $stmt = $this->database->prepare("UPDATE USUARIOS SET DIFICULTAD = ? WHERE _ID = ?");
+        $this->database->execute($stmt, ["di", $porcentajeAciertos, $userId]);
+    }
+
+    public function getPromedioAciertos($userId)
+    {
+        $stmt = $this->database->prepare("SELECT DIFICULTAD FROM USUARIOS WHERE _ID = ?");
+        return $this->database->execute($stmt, ["i", $userId])[0]['DIFICULTAD'];
+    }
+
     public function userExists($username, $email)
     {
         $stmt = $this->database->prepare("SELECT * FROM USUARIOS WHERE USERNAME = ? OR EMAIL = ?");

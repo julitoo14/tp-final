@@ -29,7 +29,7 @@ class Configuration
 
     public static function getGameController()
     {
-        return new GameController(self::getPresenter(), self::getPreguntasModel(), self::getPartidasModel());
+        return new GameController(self::getPresenter(), self::getPreguntasModel(), self::getPartidasModel(), self::getUsersModel());
     }
 
 
