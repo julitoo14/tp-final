@@ -23,8 +23,18 @@ class GameController
         $partidaId = $_SESSION['partidaId'];
         $puntos = $this->partidasModel->getPuntaje($partidaId);
         $promedioJugador = $this->usersModel->getPromedioAciertos($userId);
-        // Obtengo una pregunta aleatoria
-        $preguntaRandom = $this->preguntasModel->getPreguntaRandom($userId, $promedioJugador);
+
+        // Verifica si ya hay una pregunta en la sesión
+        if (isset($_SESSION['pregunta'])) {
+            // Usa la pregunta de la sesión
+            $preguntaRandom = $_SESSION['pregunta'];
+        } else {
+            // Obtengo una pregunta aleatoria
+            $preguntaRandom = $this->preguntasModel->getPreguntaRandom($userId, $promedioJugador);
+            // Almacena la pregunta en la sesión
+            $_SESSION['pregunta'] = $preguntaRandom;
+        }
+
         // Obtengo el ID de la pregunta aleatoria
         $preguntaId = $preguntaRandom['_id'];
         // Obtengo el color de la categoría de la pregunta
@@ -76,9 +86,12 @@ class GameController
         // Registra la pregunta como jugada
         $this->preguntasModel->addPreguntaJugada($userId, $preguntaId, $esCorrecta);
 
+        //Elimino la pregunta de la sesion
+        unset($_SESSION['pregunta']);
+
         if ($esCorrecta) {
             // Redirigir a la siguiente pregunta
-            $this->getQuestion();
+            header("Location: /Game/getQuestion");
         } else {
             // Redirigir al lobby con mensaje de pérdida y puntaje
             $this->presenter->render("view/HomeView.mustache", [
