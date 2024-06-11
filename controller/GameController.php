@@ -24,7 +24,7 @@ class GameController
         $puntos = $this->partidasModel->getPuntaje($partidaId);
         $promedioJugador = $this->usersModel->getPromedioAciertos($userId);
         // Obtengo una pregunta aleatoria
-        $preguntaRandom = $this->preguntasModel->getPreguntaRandom($userId);
+        $preguntaRandom = $this->preguntasModel->getPreguntaRandom($userId, $promedioJugador);
         // Obtengo el ID de la pregunta aleatoria
         $preguntaId = $preguntaRandom['_id'];
         // Obtengo el color de la categoría de la pregunta
