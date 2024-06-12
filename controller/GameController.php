@@ -101,4 +101,27 @@ class GameController
         }
     }
 
+    public function timeUp()
+    {
+        $userId = isset($_SESSION['user']) ? $_SESSION['user'][0]['_id'] : null;
+        $partidaId = $_SESSION['partidaId'];
+        $puntos = $this->partidasModel->getPuntaje($partidaId);
+        $puntos = $puntos[0]['puntaje'];
+
+        // Almacena el mensaje y el puntaje en la sesión
+        $_SESSION['mensaje'] = 'Perdiste';
+        $_SESSION['puntaje'] = $puntos;
+
+        // Redirige al usuario a la página de inicio y termina la ejecución del script
+        header("Location: /HomeView.mustache");
+        exit();
+    }
+
+    public function getPartidaId()
+    {
+        echo $_SESSION['partidaId'];
+    }
+
+
+
 }
