@@ -15,7 +15,9 @@
                 <tbody>
                 {{#topUsers}}
                     <tr>
-                        <td class="text-center">{{USERNAME}}</td>
+                        <td class="text-center">
+                            <a href="/UsuarioPerfil/getProfile?username={{USERNAME}}">{{USERNAME}}</a>
+                        </td>
                         <td class="text-center">{{TOTAL_SCORE}}</td>
                     </tr>
                 {{/topUsers}}

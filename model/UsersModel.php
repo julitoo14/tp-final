@@ -8,7 +8,7 @@ class UsersModel
         $this->database = $database;
     }
 
-    public function register($username, $password, $rep_password, $email, $name, $surname, $hash, $profile_pic, $birth_year, $gender, $country, $city)
+    public function register($username, $password, $rep_password, $email, $name, $surname, $hash, $profile_pic, $birth_year, $gender, $country, $city, $latitude, $longitude)
     {
         if ($this->userExists($username, $email)) {
             $_SESSION['error'] = "El usuario o email ya existe";
@@ -24,8 +24,8 @@ class UsersModel
             $_SESSION['error'] = "Debe cargar una foto de perfil válida";
         }
 
-        $stmt = $this->database->prepare("INSERT INTO `USUARIOS`(`USERNAME`, `PASSWORD`, `EMAIL`, `NAME`, `SURNAME`,`HASH`,`PROFILE_PIC`,`BIRTH_YEAR`, `GENDER`, `COUNTRY`, `CITY`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $this->database->execute($stmt, ["sssssssisss", $username, $password, $email, $name, $surname, $hash, $profile_pic, $birth_year, $gender, $country, $city]);
+        $stmt = $this->database->prepare("INSERT INTO `USUARIOS`(`USERNAME`, `PASSWORD`, `EMAIL`, `NAME`, `SURNAME`,`HASH`,`PROFILE_PIC`,`BIRTH_YEAR`, `GENDER`, `COUNTRY`, `CITY`, `LATITUDE`, `LONGITUDE`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $this->database->execute($stmt, ["sssssssisssdd", $username, $password, $email, $name, $surname, $hash, $profile_pic, $birth_year, $gender, $country, $city, $latitude, $longitude]);
         return true;
     }
 

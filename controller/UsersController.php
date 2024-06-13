@@ -39,6 +39,8 @@ class UsersController
         $gender = $_POST['gender'];
         $country = $_POST['country'];
         $city = $_POST['city'];
+        $latitude = $_POST['latitude'];
+        $longitude = $_POST['longitude'];
 
         $hash = md5($username . $email . date("Y-m-d"));
 
@@ -49,7 +51,7 @@ class UsersController
             exit();
         }
 
-        if ($this->model->register($username, $password, $rep_password, $email, $name, $surname, $hash, $contenidoProfilePic, $birth_year, $gender, $country, $city)) {
+        if ($this->model->register($username, $password, $rep_password, $email, $name, $surname, $hash, $contenidoProfilePic, $birth_year, $gender, $country, $city, $latitude, $longitude)) {
             $user = $this->model->getUserByUsername($username);
             $id = $user[0]['_id'];
             $hash = md5($username . $email . date("Y-m-d"));
