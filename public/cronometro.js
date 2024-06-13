@@ -1,36 +1,25 @@
 document.addEventListener('DOMContentLoaded', function() {
     const timerElement = document.getElementById('timer');
     const timeBarFill = document.getElementById('time-bar-fill');
-    let timeLeft = localStorage.getItem('timeLeft') || 20;
+    let timeLeft = 20;
     const totalTime = 20;
-    let partidaId;
 
-    fetch('/Game/getPartidaId', {
-        method: 'GET',
-    })
-        .then(response => response.text())
-        .then(id => {
-            localStorage.setItem('partidaId', id);
-            partidaId = id;
-        })
-        .catch(error => console.error('Error:', error));
-
-    timerElement.textContent = timeLeft;
-    timeBarFill.style.width = ((timeLeft / totalTime) * 100) + '%';
-
-    setTimeout(() => {
-        timeBarFill.style.width = '0%';
-    }, 0);
-
-    const interval = setInterval(() => {
+    const intervalId = setInterval(() => {
         timeLeft--;
-        localStorage.setItem('timeLeft', timeLeft);
         timerElement.textContent = timeLeft;
+
+        // Calculate the width percentage of the time bar
+        const fillWidth = (timeLeft / totalTime) * 100;
+        timeBarFill.style.width = `${fillWidth}%`;
+
         if (timeLeft <= 0) {
-            clearInterval(interval);
-            $('#timeUpModal').modal('show'); // Muestra el modal
-            localStorage.removeItem('timeLeft');
+            clearInterval(intervalId);
+            $('#timeUpModal').modal('show');
         }
     }, 1000);
 
+    document.getElementById('acceptButton').addEventListener('click', function() {
+        // Redirection to time up logic
+        window.location.href = "/index.php?controller=Game&action=timeUp";
+    });
 });

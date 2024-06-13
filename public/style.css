@@ -79,6 +79,5 @@
     height: 100%;
     background-color: #76c7c0;
     width: 100%;
-    transition: width 20s linear;
-
+    transition: width linear;
 }

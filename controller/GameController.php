@@ -17,31 +17,22 @@ class GameController
 
     public function getQuestion()
     {
-        //Obtengo el id del usuario logueado
         $userId = isset($_SESSION['user']) ? $_SESSION['user'][0]['_id'] : null;
-        //Obtengo el id de la partida actual y luego el puntaje de la misma
         $partidaId = $_SESSION['partidaId'];
         $puntos = $this->partidasModel->getPuntaje($partidaId);
         $promedioJugador = $this->usersModel->getPromedioAciertos($userId);
 
-        // Verifica si ya hay una pregunta en la sesión
         if (isset($_SESSION['pregunta'])) {
-            // Usa la pregunta de la sesión
             $preguntaRandom = $_SESSION['pregunta'];
         } else {
-            // Obtengo una pregunta aleatoria
             $preguntaRandom = $this->preguntasModel->getPreguntaRandom($userId, $promedioJugador);
-            // Almacena la pregunta en la sesión
             $_SESSION['pregunta'] = $preguntaRandom;
         }
 
-        // Obtengo el ID de la pregunta aleatoria
         $preguntaId = $preguntaRandom['_id'];
-        // Obtengo el color de la categoría de la pregunta
         $colorCategoria = $this->preguntasModel->getColorCategoria($preguntaId);
-        // Obtengo las respuestas de la pregunta
         $respuestas = $this->preguntasModel->getRespuestas($preguntaId);
-        // Renderizo la vista pasando los datos necesarios
+
         $this->presenter->render("view/GameView.mustache", [
             'colorCategoria' => $colorCategoria,
             'pregunta' => $preguntaRandom,
@@ -50,14 +41,13 @@ class GameController
         ]);
     }
 
-    public function startGame(){
+    public function startGame()
+    {
         $userId = isset($_SESSION['user']) ? $_SESSION['user'][0]['_id'] : null;
         $partidaId = $this->partidasModel->addPartida($userId);
         $_SESSION['partidaId'] = $partidaId;
         $this->getQuestion();
     }
-
-
 
     public function postAnswer()
     {
@@ -65,35 +55,28 @@ class GameController
         $preguntaId = $_POST['preguntaId'];
         $respuestaUsuarioId = $_POST['respuestaId'];
 
-        // Comprueba si la respuesta del usuario es correcta
         $esCorrecta = $this->preguntasModel->comprobarRespuesta($respuestaUsuarioId);
 
-        // Actualiza la cantidad de veces que fue respondida la pregunta
         $this->preguntasModel->agregarVezJugada($preguntaId);
         $this->usersModel->agregarPreguntaJugada($userId);
-        // Actualiza la cantidad de veces que fue respondida correctamente la pregunta
+
         if ($esCorrecta) {
             $this->preguntasModel->agregarVezCorrecta($preguntaId);
             $this->usersModel->agregarPreguntaCorrecta($userId);
         }
 
-        // Actualiza el puntaje de la partida
         $partidaId = $_SESSION['partidaId'];
         $puntos = $this->partidasModel->getPuntaje($partidaId);
         $puntos = $esCorrecta ? $puntos[0]['puntaje'] + 1 : $puntos[0]['puntaje'];
         $this->partidasModel->actualizarPuntosPartida($partidaId, $puntos);
 
-        // Registra la pregunta como jugada
         $this->preguntasModel->addPreguntaJugada($userId, $preguntaId, $esCorrecta);
 
-        //Elimino la pregunta de la sesion
         unset($_SESSION['pregunta']);
 
         if ($esCorrecta) {
-            // Redirigir a la siguiente pregunta
             header("Location: /Game/getQuestion");
         } else {
-            // Redirigir al lobby con mensaje de pérdida y puntaje
             $_SESSION['mensaje'] = 'Perdiste';
             $_SESSION['puntaje'] = $puntos;
             header("Location: /Home");
@@ -107,11 +90,9 @@ class GameController
         $puntos = $this->partidasModel->getPuntaje($partidaId);
         $puntos = $puntos[0]['puntaje'];
 
-        // Almacena el mensaje y el puntaje en la sesión
         $_SESSION['mensaje'] = 'Perdiste';
         $_SESSION['puntaje'] = $puntos;
 
-        // Redirige al usuario a la página de inicio y termina la ejecución del script
         header("Location: /Home");
         exit();
     }
@@ -120,7 +101,4 @@ class GameController
     {
         echo $_SESSION['partidaId'];
     }
-
-
-
 }
