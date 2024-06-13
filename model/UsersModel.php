@@ -98,4 +98,17 @@ class UsersModel
         $stmt = $this->database->prepare("SELECT * FROM USUARIOS WHERE _ID = ?");
         return $this->database->execute($stmt, ["i", $userId]);
     }
+
+    public function getMaxScore($userId)
+    {
+
+        $stmt = $this->database->prepare("SELECT SUM(puntaje) as TOTAL_SCORE FROM PARTIDAS WHERE USER_ID = ?");
+        return $this->database->execute($stmt, ["i", $userId])[0]['TOTAL_SCORE'];
+    }
+
+    public function getTopUsers()
+    {
+        $stmt = $this->database->prepare("SELECT USERNAME, SUM(puntaje) as TOTAL_SCORE FROM USUARIOS JOIN PARTIDAS ON USUARIOS._ID = PARTIDAS.USER_ID GROUP BY USERNAME ORDER BY TOTAL_SCORE DESC");
+        return $this->database->execute($stmt);
+    }
 }

@@ -35,4 +35,10 @@ class PartidasModel
         $this->database->execute($stmt, ["ii", $puntos, $partidaId]);
     }
 
+    public function getPartidasByUser($userId)
+    {
+        $stmt = $this->database->prepare("SELECT fecha_creacion, puntaje FROM PARTIDAS WHERE USER_ID = ? ORDER BY fecha_creacion DESC");
+        return $this->database->execute($stmt, ["i", $userId]);
+    }
+
 }

@@ -89,7 +89,7 @@ class UsersController
         if ($user) {
             $_SESSION['user'] = $user;
             $username = isset($_SESSION['user']) && is_array($_SESSION['user']) ? $_SESSION['user'][0]['username'] : null;
-            $this->presenter->render("view/HomeView.mustache", ['username' => $username]);
+            header("Location: /Home");
         } else {
             $_SESSION['error'] = "Usuario o contraseña incorrectos";
             $this->presenter->render("view/LoginView.mustache", ['error' => $_SESSION['error']]);

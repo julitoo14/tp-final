@@ -94,10 +94,9 @@ class GameController
             header("Location: /Game/getQuestion");
         } else {
             // Redirigir al lobby con mensaje de pérdida y puntaje
-            $this->presenter->render("view/HomeView.mustache", [
-                'mensaje' => 'Perdiste',
-                'puntaje' => $puntos
-            ]);
+            $_SESSION['mensaje'] = 'Perdiste';
+            $_SESSION['puntaje'] = $puntos;
+            header("Location: /Home");
         }
     }
 
@@ -113,7 +112,7 @@ class GameController
         $_SESSION['puntaje'] = $puntos;
 
         // Redirige al usuario a la página de inicio y termina la ejecución del script
-        header("Location: /HomeView.mustache");
+        header("Location: /Home");
         exit();
     }
 

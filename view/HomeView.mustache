@@ -1,8 +1,27 @@
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
-<h1 class="w3-center">Hola, {{username}}!</h1>
-<p class="w3-center">Te deseamos una gran experiencia.</p>
-<a href="/Game/startGame"><button>Jugar Partida</button></a>
+<div class="container">
+    <div class="row">
+        <!-- Columna de ranking -->
+        <div class="col d-flex flex-column align-items-center justify-content-center">
+            <h2>Ranking</h2>
+            <a href="/Ranking/getRanking" class="btn btn-primary">Ver Ranking</a>
+        </div>
+
+        <!-- Columna de jugar partida -->
+        <div class="col d-flex flex-column align-items-center justify-content-center">
+            <h1 class="w3-center">Hola, {{username}}!</h1>
+            <p class="text-center">Puntaje máximo: {{maxScore}}</p>
+            <a href="/Game/startGame" class="btn btn-primary">Jugar Partida</a>
+        </div>
+
+        <!-- Columna de partidas del usuario -->
+        <div class="col d-flex flex-column align-items-center justify-content-center">
+            <h2>Mis partidas</h2>
+            <a href="/Partidas/getPartidas" class="btn btn-primary">Mis Partidas</a>
+        </div>
+    </div>
+</div>
 
 <div class="modal fade" id="perdisteModal" tabindex="-1" aria-labelledby="perdisteModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
