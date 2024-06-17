@@ -141,4 +141,20 @@ class PreguntasModel
         return !empty($result) && $result[0]['es_correcta'] == 1;
     }
 
+    public function getRespuestaCorrecta($preguntaId){
+        $stmt = $this->database->prepare("SELECT texto FROM respuestas WHERE ID_PREGUNTA = ? AND ES_CORRECTA = 1");
+        return $this->database->execute($stmt, ["i", $preguntaId]);
+    }
+
+    public function getRespuesta($rspuestaUsuarioId){
+        $stmt = $this->database->prepare("SELECT texto FROM respuestas WHERE _ID = ?");
+        return $this->database->execute($stmt, ["i", $rspuestaUsuarioId]);
+    }
+
+    public function getPregunta($preguntaId){
+        $stmt = $this->database->prepare("SELECT * FROM preguntas WHERE _ID = ?");
+        return $this->database->execute($stmt, ["i", $preguntaId]);
+    }
+
+
 }

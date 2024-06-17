@@ -26,7 +26,7 @@ class HomeController
             'maxScore' => $maxScore,
             'topUsers' => $topUsers,
             'mensaje' => $mensaje,
-            'puntaje' => $puntaje
+            'puntaje' => $puntaje,
         ]);
         $_SESSION['mensaje'] = null;
     }

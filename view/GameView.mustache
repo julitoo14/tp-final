@@ -14,23 +14,23 @@
             <div class="time-bar-fill" id="time-bar-fill"></div>
         </div>
     </div>
-    <div class="w3-container">
+    <div class="container mt-5">
         <form action="/index.php" method="post">
-            <ul>
+            <div id="respuestas" class="list-group mb-3">
                 {{#respuestas}}
-                    <li>
-                        <input type="radio" id="respuesta{{_id}}" name="respuestaId" value="{{_id}}">
-                        <label for="respuesta{{_id}}">{{texto}}</label>
-                    </li>
+                    <div class="list-group-item list-group-item-action respuesta py-3" data-respuesta-id="{{_id}}">{{texto}}</div>
                 {{/respuestas}}
-            </ul>
+            </div>
+            <input type="hidden" id="respuesta-id" name="respuestaId">
             <input type="hidden" id="pregunta-id" name="preguntaId" value="{{pregunta._id}}">
             <input type="hidden" name="controller" value="Game">
             <input type="hidden" name="action" value="postAnswer">
-            <input type="submit" value="Enviar respuesta">
+            <button type="submit" class="btn btn-primary">Enviar respuesta</button>
         </form>
     </div>
-    <div>PUNTAJE: {{puntos}}</div>
+    <div class="alert alert-info mt-3" role="alert">
+        Puntaje: {{puntos}}
+    </div>
 </div>
 <div class="modal fade" id="timeUpModal" tabindex="-1" aria-labelledby="timeUpModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -44,6 +44,10 @@
             <div class="modal-body">
                 <p>El tiempo se ha agotado.</p>
             </div>
+            <div class="modal-body">
+                <p>Puntaje Final: {{puntos}}</p>
+            </div>
+
             <div class="modal-footer">
                 <form action="/index.php" method="post">
                     <input type="hidden" name="controller" value="Game">
@@ -54,3 +58,21 @@
         </div>
     </div>
 </div>
+
+
+<script>
+
+    $(document).ready(function() {
+        $('#perdisteModal').on('hidden.bs.modal', function (e) {
+            window.location.href = "/Home";
+        });
+    });
+
+    $(document).ready(function() {
+        $('.respuesta').on('click', function() {
+            $('.respuesta').removeClass('active');
+            $(this).addClass('active');
+            $('#respuesta-id').val($(this).data('respuesta-id'));
+        });
+    });
+</script>

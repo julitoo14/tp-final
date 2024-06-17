@@ -21,6 +21,13 @@ class GameController
         $partidaId = $_SESSION['partidaId'];
         $puntos = $this->partidasModel->getPuntaje($partidaId);
         $promedioJugador = $this->usersModel->getPromedioAciertos($userId);
+        $mensaje = isset($_SESSION['mensaje']) ? $_SESSION['mensaje'] : null;
+        $respuestaCorrecta = isset($_SESSION['respuestaCorrecta']) ? $_SESSION['respuestaCorrecta'] : null;
+
+        if ($mensaje == 'Perdiste') {
+            header("Location: /Game/endGame");
+            exit();
+        }
 
         if (isset($_SESSION['pregunta'])) {
             $preguntaRandom = $_SESSION['pregunta'];
@@ -37,8 +44,12 @@ class GameController
             'colorCategoria' => $colorCategoria,
             'pregunta' => $preguntaRandom,
             'respuestas' => $respuestas,
-            'puntos' => $puntos[0]['puntaje']
+            'puntos' => $puntos[0]['puntaje'],
+            'mensaje' => $mensaje,
+            'respuestaCorrecta' => $respuestaCorrecta
         ]);
+        $_SESSION['mensaje'] = null;
+        $_SESSION['respuestaCorrecta'] = null;
     }
 
     public function startGame()
@@ -77,9 +88,19 @@ class GameController
         if ($esCorrecta) {
             header("Location: /Game/getQuestion");
         } else {
-            $_SESSION['mensaje'] = 'Perdiste';
-            $_SESSION['puntaje'] = $puntos;
-            header("Location: /Home");
+            $respuestas = $this->preguntasModel->getRespuestas($preguntaId);
+            foreach ($respuestas as &$respuesta) {
+                $respuesta['esRespuestaSeleccionada'] = $respuesta['_id'] == $respuestaUsuarioId;
+                $respuesta['esRespuestaCorrecta'] = $this->preguntasModel->comprobarRespuesta($respuesta['_id']);
+            }
+
+            $_SESSION['pregunta'] = $this->preguntasModel->getPregunta($preguntaId);
+            $_SESSION['respuestas'] = $respuestas;
+            $_SESSION['respuestaSeleccionada'] = $this->preguntasModel->getRespuesta($respuestaUsuarioId);
+            $_SESSION['respuestaCorrecta'] = $this->preguntasModel->getRespuestaCorrecta($preguntaId);
+
+            header("Location: /Game/endGame");
+            exit();
         }
     }
 
@@ -95,6 +116,37 @@ class GameController
 
         header("Location: /Home");
         exit();
+    }
+
+    public function endGame()
+    {
+        $partidaId = $_SESSION['partidaId'];
+        $puntos = $this->partidasModel->getPuntaje($partidaId);
+        $puntos = $puntos[0]['puntaje'];
+
+        $pregunta = $_SESSION['pregunta'];
+        $respuestas = $_SESSION['respuestas'];
+        $respuestaSeleccionada = $_SESSION['respuestaSeleccionada'];
+        $respuestaCorrecta = $_SESSION['respuestaCorrecta'];
+
+        // Aquí puedes agregar la lógica para guardar el puntaje final del usuario, si es necesario
+
+        // Renderiza la vista de fin de juego con el puntaje final
+        $this->presenter->render("view/EndGameView.mustache", [
+            'puntos' => $puntos,
+            'pregunta' => $pregunta,
+            'respuestas' => $respuestas,
+            'respuestaSeleccionada' => $respuestaSeleccionada,
+            'respuestaCorrecta' => $respuestaCorrecta
+        ]);
+
+        // Limpia las variables de sesión relacionadas con el juego
+        unset($_SESSION['partidaId']);
+        unset($_SESSION['pregunta']);
+        unset($_SESSION['respuestas']);
+        unset($_SESSION['respuestaSeleccionada']);
+        unset($_SESSION['respuestaCorrecta']);
+        unset($_SESSION['mensaje']);
     }
 
     public function getPartidaId()

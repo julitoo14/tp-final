@@ -20,7 +20,16 @@ document.addEventListener('DOMContentLoaded', function() {
     // Almacenar el ID de la pregunta actual en localStorage
     localStorage.setItem('preguntaId', preguntaId);
 
+
     const intervalId = setInterval(() => {
+        // Verificar si el modal de "Perdiste" está visible
+        if ($('#perdisteModal').hasClass('show')) {
+            clearInterval(intervalId);
+            localStorage.removeItem('timeLeft');
+            localStorage.removeItem('preguntaId');
+            return;
+        }
+
         timeLeft--;
         localStorage.setItem('timeLeft', timeLeft);
         timerElement.textContent = timeLeft;
