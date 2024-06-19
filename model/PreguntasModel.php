@@ -8,7 +8,8 @@ class PreguntasModel
         $this->database = $database;
     }
 
-    public function getPreguntaRandom($userId, $promedioAciertosUsuario){
+    public function getPreguntaRandom($userId, $promedioAciertosUsuario)
+    {
         // Define el rango de dificultad basado en el promedio de aciertos del usuario
         if ($promedioAciertosUsuario <= 30) { // si el usuario promedia menos de 30% de aciertos le doy preguntas faciles
             $dificultadMin = 70;
@@ -53,7 +54,8 @@ class PreguntasModel
         return $preguntaRandom;
     }
 
-    public function getColorCategoria($preguntaId) {
+    public function getColorCategoria($preguntaId)
+    {
 
         $stmt = $this->database->prepare("
         SELECT c.colorCategoria 
@@ -69,7 +71,8 @@ class PreguntasModel
         return $colorCategoria ? $colorCategoria['colorCategoria'] : null;
     }
 
-    public function agregarVezJugada($preguntaId){
+    public function agregarVezJugada($preguntaId)
+    {
         $stmt = $this->database->prepare("UPDATE PREGUNTAS SET VECES_JUGADA = VECES_JUGADA + 1 WHERE _ID = ?");
         $this->database->execute($stmt, ["i", $preguntaId]);
 
@@ -77,7 +80,8 @@ class PreguntasModel
         $this->actualizarDificultad($preguntaId);
     }
 
-    public function agregarVezCorrecta($preguntaId){
+    public function agregarVezCorrecta($preguntaId)
+    {
         $stmt = $this->database->prepare("UPDATE PREGUNTAS SET VECES_ACERTADA = VECES_ACERTADA + 1 WHERE _ID = ?");
         $this->database->execute($stmt, ["i", $preguntaId]);
 
@@ -85,7 +89,8 @@ class PreguntasModel
         $this->actualizarDificultad($preguntaId);
     }
 
-    private function actualizarDificultad($preguntaId){
+    private function actualizarDificultad($preguntaId)
+    {
         // Obtén el número de veces que la pregunta fue jugada
         $stmt = $this->database->prepare("SELECT VECES_JUGADA FROM PREGUNTAS WHERE _ID = ?");
         $vecesJugada = $this->database->execute($stmt, ["i", $preguntaId])[0]['VECES_JUGADA'];
@@ -102,7 +107,8 @@ class PreguntasModel
         $this->database->execute($stmt, ["di", $porcentajeAciertos, $preguntaId]);
     }
 
-    public function reiniciarPartidasUsuario($userId) {
+    public function reiniciarPartidasUsuario($userId)
+    {
         $stmt = $this->database->prepare("DELETE FROM PREGUNTAS_JUGADAS WHERE USER_ID = ?");
         $this->database->execute($stmt, ["i", $userId]);
     }
@@ -113,7 +119,8 @@ class PreguntasModel
         $this->database->execute($stmt, ["iii", $userId, $preguntaId, $esCorrecta ? 1 : 0]);
     }
 
-    public function getDificultad($preguntaId){
+    public function getDificultad($preguntaId)
+    {
         // Obtén el número de veces que la pregunta fue jugada
         $stmt = $this->database->prepare("SELECT VECES_JUGADA FROM PREGUNTAS WHERE _ID = ?");
         $vecesJugada = $this->database->execute($stmt, ["i", $preguntaId])[0]['VECES_JUGADA'];
@@ -128,12 +135,14 @@ class PreguntasModel
         return $porcentajeAciertos;
     }
 
-    public function getRespuestas($preguntaId){
+    public function getRespuestas($preguntaId)
+    {
         $stmt = $this->database->prepare("SELECT * FROM respuestas WHERE ID_PREGUNTA = ?");
         return $this->database->execute($stmt, ["i", $preguntaId]);
     }
 
-    public function comprobarRespuesta($respuestaId){
+    public function comprobarRespuesta($respuestaId)
+    {
         $stmt = $this->database->prepare("SELECT es_correcta FROM respuestas WHERE _ID = ?");
         $result = $this->database->execute($stmt, ["i", $respuestaId]);
 
@@ -141,20 +150,49 @@ class PreguntasModel
         return !empty($result) && $result[0]['es_correcta'] == 1;
     }
 
-    public function getRespuestaCorrecta($preguntaId){
+    public function getRespuestaCorrecta($preguntaId)
+    {
         $stmt = $this->database->prepare("SELECT texto FROM respuestas WHERE ID_PREGUNTA = ? AND ES_CORRECTA = 1");
         return $this->database->execute($stmt, ["i", $preguntaId]);
     }
 
-    public function getRespuesta($rspuestaUsuarioId){
+    public function getRespuesta($rspuestaUsuarioId)
+    {
         $stmt = $this->database->prepare("SELECT texto FROM respuestas WHERE _ID = ?");
         return $this->database->execute($stmt, ["i", $rspuestaUsuarioId]);
     }
 
-    public function getPregunta($preguntaId){
+    public function getPregunta($preguntaId)
+    {
         $stmt = $this->database->prepare("SELECT * FROM preguntas WHERE _ID = ?");
         return $this->database->execute($stmt, ["i", $preguntaId]);
     }
 
+    public function buscarPreguntaPorDescripcion($descripcion)
+    {
+        return $this->database->query("SELECT * FROM preguntas WHERE texto = '$descripcion'");
+    }
+
+    public function agregarPregunta($idCategoria, $descripcion, $opcionA, $opcionB, $opcionC, $opcionD, $respuestaCorrecta)
+    {
+        // Inserta la pregunta en la tabla de preguntas
+        $stmt = $this->database->prepare("INSERT INTO preguntas (texto, id_categoria) VALUES (?, ?)");
+        $this->database->execute($stmt, ["si", $descripcion, $idCategoria]);
+
+        // Obtiene el ID de la pregunta insertada
+        $preguntaId = $this->database->getInsertId();
+
+        // Prepara el statement para insertar las respuestas
+        $stmt = $this->database->prepare("INSERT INTO respuestas (texto, opcion, es_correcta, id_pregunta) VALUES (?, ?, ?, ?)");
+
+        // Inserta cada respuesta en la tabla de respuestas
+        $opciones = ['A' => $opcionA, 'B' => $opcionB, 'C' => $opcionC, 'D' => $opcionD];
+        foreach ($opciones as $opcion => $texto) {
+            $esCorrecta = ($opcion === $respuestaCorrecta) ? 1 : 0;
+            $this->database->execute($stmt, ["ssii", $texto, $opcion, $esCorrecta, $preguntaId]);
+        }
+
+
+    }
 
 }

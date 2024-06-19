@@ -76,12 +76,13 @@ INSERT INTO `partidas` (`_id`, `user_id`, `puntaje`, `fecha_creacion`) VALUES
 --
 
 CREATE TABLE `preguntas` (
-  `_id` int(11) NOT NULL,
+  `_id` int(11) NOT NULL AUTO_INCREMENT,
   `texto` varchar(255) NOT NULL,
   `id_categoria` int(11) NOT NULL,
   `veces_jugada` int(200) NOT NULL DEFAULT 0,
   `veces_acertada` int(200) NOT NULL DEFAULT 0,
-  `DIFICULTAD` float NOT NULL DEFAULT 0
+  `DIFICULTAD` float NOT NULL DEFAULT 0,
+  PRIMARY KEY (`_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -255,7 +256,6 @@ ALTER TABLE `partidas`
 -- Indices de la tabla `preguntas`
 --
 ALTER TABLE `preguntas`
-  ADD PRIMARY KEY (`_id`),
   ADD KEY `id_categoria` (`id_categoria`);
 
 --

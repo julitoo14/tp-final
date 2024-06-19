@@ -5,6 +5,8 @@ include_once ("controller/GameController.php");
 include_once ("controller/RankingController.php");
 include_once ("controller/PartidasController.php");
 include_once ("controller/UsuarioPerfilController.php");
+include_once ("controller/PreguntasController.php");
+
 
 include_once ("model/UsersModel.php");
 include_once ("model/PreguntasModel.php");
@@ -48,6 +50,11 @@ class Configuration
     public static function getUsuarioPerfilController()
     {
         return new UsuarioPerfilController(self::getPresenter(), self::getUsersModel(), self::getPartidasModel());
+    }
+
+    public static function getPreguntasController()
+    {
+        return new PreguntasController(self::getPresenter(), self::getPreguntasModel());
     }
 
 
