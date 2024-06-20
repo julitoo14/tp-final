@@ -24,11 +24,11 @@ class PreguntasModel
 
         // Traigo una pregunta que el usuario aún no ha respondido y que se encuentra en el rango de dificultad adecuado
         $stmt = $this->database->prepare("
-        SELECT * FROM preguntas 
-        WHERE _id NOT IN (
-            SELECT PREGUNTA_ID FROM PREGUNTAS_JUGADAS WHERE USER_ID = ?
-        ) AND DIFICULTAD >= ? AND DIFICULTAD <= ?
-    ");
+         SELECT * FROM preguntas
+            WHERE _id NOT IN (
+             SELECT PREGUNTA_ID FROM PREGUNTAS_JUGADAS WHERE USER_ID = ?
+          ) AND DIFICULTAD >= ? AND DIFICULTAD <= ? AND id_estado != 3
+            ");
         $preguntasSinResponder = $this->database->execute($stmt, ["iii", $userId, $dificultadMin, $dificultadMax]);
 
         // Si no hay preguntas sin responder en el rango de dificultad adecuado, traigo una pregunta sin responder sin tener en cuenta la dificultad
@@ -37,7 +37,7 @@ class PreguntasModel
             SELECT * FROM PREGUNTAS
             WHERE _ID NOT IN (
                 SELECT PREGUNTA_ID FROM PREGUNTAS_JUGADAS WHERE USER_ID = ?
-            )
+            ) AND id_estado != 3
         ");
             $preguntasSinResponder = $this->database->execute($stmt, ["i", $userId]);
 

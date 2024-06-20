@@ -41,4 +41,10 @@ class PartidasModel
         return $this->database->execute($stmt, ["i", $userId]);
     }
 
+    public function reportarPregunta($idPregunta)
+    {
+        $stmt = $this->database->prepare("UPDATE PREGUNTAS SET id_estado = 3 WHERE _ID = ?");
+        $this->database->execute($stmt, ["i", $idPregunta]);
+    }
+
 }

@@ -23,4 +23,15 @@ class PartidasController
             'partidas' => $partidas
         ]);
     }
+
+    public function reportarPregunta()
+    {
+        if (isset($_POST['pregunta-id'])){
+            $preguntaId = $_POST['pregunta-id'];
+            $this->partidasModel->reportarPregunta($preguntaId);
+            unset($_SESSION['pregunta']);
+            $_SESSION['reporte'] = 'Pregunta reportada exitosamente';
+            header("Location: /Game/getQuestion");
+        }
+    }
 }

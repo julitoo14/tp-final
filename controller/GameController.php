@@ -40,13 +40,19 @@ class GameController
         $colorCategoria = $this->preguntasModel->getColorCategoria($preguntaId);
         $respuestas = $this->preguntasModel->getRespuestas($preguntaId);
 
-        $this->presenter->render("view/GameView.mustache", [
+        $reporte = null;
+        if (isset($_SESSION['reporte'])) {
+            $reporte = $_SESSION['reporte'];
+            unset($_SESSION['reporte']); // Borra la variable de sesión después de usarla
+        }
+
+            $this->presenter->render("view/GameView.mustache", [
             'colorCategoria' => $colorCategoria,
             'pregunta' => $preguntaRandom,
             'respuestas' => $respuestas,
             'puntos' => $puntos[0]['puntaje'],
             'mensaje' => $mensaje,
-            'respuestaCorrecta' => $respuestaCorrecta
+            'respuestaCorrecta' => $respuestaCorrecta, 'reporte' => $reporte
         ]);
         $_SESSION['mensaje'] = null;
         $_SESSION['respuestaCorrecta'] = null;

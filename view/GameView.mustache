@@ -25,13 +25,32 @@
             <input type="hidden" id="pregunta-id" name="preguntaId" value="{{pregunta._id}}">
             <input type="hidden" name="controller" value="Game">
             <input type="hidden" name="action" value="postAnswer">
-            <button type="submit" class="btn btn-primary">Enviar respuesta</button>
+            <div class="d-flex justify-content-between">
+                <button type="submit" class="btn btn-primary">Enviar respuesta</button>
+
+
+            </div>
         </form>
+
+        <form action="/index.php" method="post" id="form" enctype="multipart/form-data">
+            <input type="hidden" name="controller" value="Partidas">
+            <input type="hidden" name="action" value="reportarPregunta">
+            <input type="hidden" id="pregunta-id" name="pregunta-id" value="{{pregunta._id}}">
+            <button type="submit" class="btn btn-danger mt-3">Reportar Pregunta</button>
+        </form>
+        {{#reporte}}
+            <div class="alert alert-success mt-3" role="alert">
+                {{reporte}}
+            </div>
+        {{/reporte}}
     </div>
     <div class="alert alert-info mt-3" role="alert">
         Puntaje: {{puntos}}
     </div>
 </div>
+
+
+<!-- Modal de cuando se termina el tiempo -->
 <div class="modal fade" id="timeUpModal" tabindex="-1" aria-labelledby="timeUpModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -60,6 +79,7 @@
 </div>
 
 
+
 <script>
 
     $(document).ready(function() {
@@ -75,4 +95,5 @@
             $('#respuesta-id').val($(this).data('respuesta-id'));
         });
     });
+
 </script>

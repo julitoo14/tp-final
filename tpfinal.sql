@@ -82,6 +82,7 @@ CREATE TABLE `preguntas` (
   `veces_jugada` int(200) NOT NULL DEFAULT 0,
   `veces_acertada` int(200) NOT NULL DEFAULT 0,
   `DIFICULTAD` float NOT NULL DEFAULT 0,
+  `id_estado` int(11) NOT NULL DEFAULT 1,
   PRIMARY KEY (`_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -89,21 +90,38 @@ CREATE TABLE `preguntas` (
 -- Volcado de datos para la tabla `preguntas`
 --
 
-INSERT INTO `preguntas` (`_id`, `texto`, `id_categoria`, `veces_jugada`, `veces_acertada`, `DIFICULTAD`) VALUES
-(1, '¿Cuántos jugadores tiene un equipo de baloncesto en el campo?', 1, 10, 6, 60),
-(2, '¿Qué país ha ganado la mayor cantidad de Copas del Mundo de fútbol?', 1, 10, 6, 60),
-(3, '¿Cuál es el continente más grande del mundo?', 2, 9, 9, 100),
-(4, '¿Cuál es la capital de Francia?', 2, 9, 9, 100),
-(5, '¿En qué año comenzó la Segunda Guerra Mundial?', 3, 12, 5, 41.6667),
-(6, '¿Qué antigua civilización construyó las pirámides de Giza?', 3, 12, 4, 33.3333),
-(7, '¿Cuál es el elemento químico con el símbolo O ?', 4, 10, 4, 40),
-(8, '¿Qué científico formuló la teoría de la relatividad?', 4, 10, 6, 60),
-(9, '¿Qué compañía desarrolló el sistema operativo Windows?', 5, 9, 6, 66.6667),
-(10, '¿Qué lenguaje de programación tiene un símbolo de elefante en su logo?', 5, 9, 7, 77.7778),
-(11, '¿Cuál es la moneda oficial de la Unión Europea?', 6, 12, 6, 50),
-(12, '¿Qué bebida se obtiene al exprimir las uvas y fermentarlas?', 6, 10, 7, 70);
+INSERT INTO `preguntas` (`_id`, `texto`, `id_categoria`, `veces_jugada`, `veces_acertada`, `DIFICULTAD`, `id_estado` ) VALUES
+(1, '¿Cuántos jugadores tiene un equipo de baloncesto en el campo?', 1, 10, 6, 60, 1),
+(2, '¿Qué país ha ganado la mayor cantidad de Copas del Mundo de fútbol?', 1, 10, 6, 60, 1),
+(3, '¿Cuál es el continente más grande del mundo?', 2, 9, 9, 100, 1),
+(4, '¿Cuál es la capital de Francia?', 2, 9, 9, 100, 1),
+(5, '¿En qué año comenzó la Segunda Guerra Mundial?', 3, 12, 5, 41.6667, 1),
+(6, '¿Qué antigua civilización construyó las pirámides de Giza?', 3, 12, 4, 33.3333, 1),
+(7, '¿Cuál es el elemento químico con el símbolo O ?', 4, 10, 4, 40, 1),
+(8, '¿Qué científico formuló la teoría de la relatividad?', 4, 10, 6, 60, 1),
+(9, '¿Qué compañía desarrolló el sistema operativo Windows?', 5, 9, 6, 66.6667, 1),
+(10, '¿Qué lenguaje de programación tiene un símbolo de elefante en su logo?', 5, 9, 7, 77.7778, 1),
+(11, '¿Cuál es la moneda oficial de la Unión Europea?', 6, 12, 6, 50, 1),
+(12, '¿Qué bebida se obtiene al exprimir las uvas y fermentarlas?', 6, 10, 7, 70, 1);
 
 -- --------------------------------------------------------
+
+-- Estructura de tabla para la tabla `estado_pregunta`
+--
+
+CREATE TABLE `estado_pregunta` (
+    `id` int(11) NOT NULL,
+    `descripcion` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `estado_pregunta`
+--
+
+INSERT INTO `estado_pregunta` (`id`, `descripcion`) VALUES
+     (1, 'SUGERIDA'),
+     (2, 'APROBADA'),
+     (3, 'REPORTADA');
 
 --
 -- Estructura de tabla para la tabla `preguntas_jugadas`
