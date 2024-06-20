@@ -20,7 +20,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Almacenar el ID de la pregunta actual en localStorage
     localStorage.setItem('preguntaId', preguntaId);
 
-
     const intervalId = setInterval(() => {
         // Verificar si el modal de "Perdiste" está visible
         if ($('#perdisteModal').hasClass('show')) {
@@ -34,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
         localStorage.setItem('timeLeft', timeLeft);
         timerElement.textContent = timeLeft;
 
-        // Calculate the width percentage of the time bar
+        // Calcular el ancho de la barra de tiempo
         const fillWidth = (timeLeft / totalTime) * 100;
         timeBarFill.style.width = `${fillWidth}%`;
 
@@ -42,14 +41,9 @@ document.addEventListener('DOMContentLoaded', function() {
             clearInterval(intervalId);
             localStorage.removeItem('timeLeft');
             localStorage.removeItem('preguntaId');
-            $('#timeUpModal').modal('show');
+            window.location.href = "/index.php?controller=Game&action=timeUp"; // Redirigir directamente
         }
     }, 1000);
-
-    document.getElementById('acceptButton').addEventListener('click', function() {
-        // Redirigir a la lógica de tiempo agotado
-        window.location.href = "/index.php?controller=Game&action=timeUp";
-    });
 
     window.addEventListener('beforeunload', function() {
         // Guardar el tiempo restante antes de recargar o cerrar la página

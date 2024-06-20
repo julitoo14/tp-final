@@ -50,43 +50,8 @@
 </div>
 
 
-<!-- Modal de cuando se termina el tiempo -->
-<div class="modal fade" id="timeUpModal" tabindex="-1" aria-labelledby="timeUpModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="timeUpModalLabel">Tiempo agotado</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>El tiempo se ha agotado.</p>
-            </div>
-            <div class="modal-body">
-                <p>Puntaje Final: {{puntos}}</p>
-            </div>
-
-            <div class="modal-footer">
-                <form action="/index.php" method="post">
-                    <input type="hidden" name="controller" value="Game">
-                    <input type="hidden" name="action" value="timeUp">
-                    <button id="acceptButton" type="submit" class="btn btn-primary">Aceptar</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
 <script>
 
-    $(document).ready(function() {
-        $('#perdisteModal').on('hidden.bs.modal', function (e) {
-            window.location.href = "/Home";
-        });
-    });
 
     $(document).ready(function() {
         $('.respuesta').on('click', function() {

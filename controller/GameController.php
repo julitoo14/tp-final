@@ -117,12 +117,24 @@ class GameController
         $puntos = $this->partidasModel->getPuntaje($partidaId);
         $puntos = $puntos[0]['puntaje'];
 
+        $pregunta = $_SESSION['pregunta'];
+        $preguntaId = $pregunta['_id'];
+        $respuestas = $this->preguntasModel->getRespuestas($preguntaId);
+
+        foreach ($respuestas as &$respuesta) {
+            $respuesta['esRespuestaSeleccionada'] = false;
+            $respuesta['esRespuestaCorrecta'] = $this->preguntasModel->comprobarRespuesta($respuesta['_id']);
+        }
+
         $_SESSION['mensaje'] = 'Perdiste';
         $_SESSION['puntaje'] = $puntos;
+        $_SESSION['respuestas'] = $respuestas;
+        $_SESSION['pregunta'] = $pregunta; // Asegurarse de que la pregunta está en la sesión
 
-        header("Location: /Home");
+        header("Location: /Game/endGame");
         exit();
     }
+
 
     public function endGame()
     {
@@ -131,18 +143,14 @@ class GameController
         $puntos = $puntos[0]['puntaje'];
 
         $pregunta = $_SESSION['pregunta'];
-        $respuestas = $_SESSION['respuestas'];
-        $respuestaSeleccionada = $_SESSION['respuestaSeleccionada'];
-        $respuestaCorrecta = $_SESSION['respuestaCorrecta'];
-
-        // Aquí puedes agregar la lógica para guardar el puntaje final del usuario, si es necesario
+        $respuestas = $_SESSION['respuestas'] ?? [];
+        $respuestaCorrecta = $_SESSION['respuestaCorrecta'] ?? null;
 
         // Renderiza la vista de fin de juego con el puntaje final
         $this->presenter->render("view/EndGameView.mustache", [
             'puntos' => $puntos,
             'pregunta' => $pregunta,
             'respuestas' => $respuestas,
-            'respuestaSeleccionada' => $respuestaSeleccionada,
             'respuestaCorrecta' => $respuestaCorrecta
         ]);
 
@@ -150,10 +158,11 @@ class GameController
         unset($_SESSION['partidaId']);
         unset($_SESSION['pregunta']);
         unset($_SESSION['respuestas']);
-        unset($_SESSION['respuestaSeleccionada']);
         unset($_SESSION['respuestaCorrecta']);
         unset($_SESSION['mensaje']);
     }
+
+
 
     public function getPartidaId()
     {
