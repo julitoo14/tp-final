@@ -102,8 +102,8 @@ class UsersModel
     public function getMaxScore($userId)
     {
 
-        $stmt = $this->database->prepare("SELECT SUM(puntaje) as TOTAL_SCORE FROM PARTIDAS WHERE USER_ID = ?");
-        return $this->database->execute($stmt, ["i", $userId])[0]['TOTAL_SCORE'];
+        $stmt = $this->database->prepare("SELECT MAX(puntaje) as MAX_SCORE FROM PARTIDAS WHERE USER_ID = ?");
+        return $this->database->execute($stmt, ["i", $userId])[0]['MAX_SCORE'];
     }
 
     public function getTopUsers()
