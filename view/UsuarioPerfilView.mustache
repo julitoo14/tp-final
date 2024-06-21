@@ -28,6 +28,16 @@
             <input type="hidden" name="longitude" id="longitude" value="{{longitude}}">
             <div id="map"></div>
             <br>
+            <br>
+
+            <!-- Contenedor para el código QR -->
+            <div class="text-center">
+                <h4>Comparte este perfil</h4>
+                <div id="qrcode" class="d-flex justify-content-center"></div>
+            </div>
+
+            <br>
+
 
             <div class="container">
                 <div class="row">
@@ -66,4 +76,21 @@
 <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDnX8zHMgCJGcL6D9KGRkkzYGOV2v-xv4c&callback=initMap">
 </script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://davidshimjs.github.io/qrcodejs/qrcode.min.js"></script>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Obtener la URL del perfil desde los datos pasados a la vista
+        var profileUrl =  window.location.href;
+
+
+        // Generar el QR code
+        var qrcode = new QRCode(document.getElementById("qrcode"), {
+            text: profileUrl,
+            width: 200,
+            height: 200,
+
+        });
+    });
+</script>
