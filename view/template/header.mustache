@@ -14,14 +14,14 @@
 <body style="display: flex">
 
 <div class="w3-top">
-    <div class="w3-bar w3-black w3-card" id="navbar">
+    <div class="w3-bar w3-black w3-card navbar" id="navbar">
         <div class="navbar-section navbar-left">
             <a class="w3-bar-item w3-button w3-padding-large w3-hide-medium w3-hide-large w3-right" href="javascript:void(0)" onclick="myFunction()" title="Toggle Navigation Menu">
                 <i class="fa fa-bars"></i>
             </a>
             {{#isLoggedIn}}
                 <a href="/Home/get" class="w3-bar-item w3-button" id="homenav">Home</a>
-                <a href="/Users/getProfile" class="w3-bar-item w3-button" id="perfilnav">Perfil</a>
+                <a href="/Users/getProfile" class="w3-bar-item w3-button" id="perfilnav">Mi Perfil</a>
             {{/isLoggedIn}}
         </div>
         <div class="navbar-center">
