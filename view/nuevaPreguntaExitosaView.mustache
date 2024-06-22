@@ -9,7 +9,12 @@
             <img src="/public/imagenes/brainpuzzle.png" width="400px" class="mx-auto d-block img-fluid" alt="">
         </section>
         <h2 class="text-center display-5 fw-bold">¡Gracias por colaborar con QuizArg!</h2>
-        <p class="text-center display-5">Tu pregunta será evaluada dentro de las próximas 48 horas</p>
+        {{#roleId1}}
+            <p class="text-center display-5">Pregunta agregada exitosamente!</p>
+        {{/roleId1}}
+        {{#roleId3}}
+            <p class="text-center display-5">Tu pregunta será evaluada dentro de las próximas 48 horas</p>
+        {{/roleId3}}
         <section class="text-center">
             <a href="/lobby" class="btn btn-primary btn-lg">Volver</a>
         </section>

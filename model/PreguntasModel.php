@@ -173,11 +173,11 @@ class PreguntasModel
         return $this->database->query("SELECT * FROM preguntas WHERE texto = '$descripcion'");
     }
 
-    public function agregarPregunta($idCategoria, $descripcion, $opcionA, $opcionB, $opcionC, $opcionD, $respuestaCorrecta)
+    public function agregarPregunta($idCategoria, $descripcion, $opcionA, $opcionB, $opcionC, $opcionD, $respuestaCorrecta, $idEstado)
     {
         // Inserta la pregunta en la tabla de preguntas
-        $stmt = $this->database->prepare("INSERT INTO preguntas (texto, id_categoria) VALUES (?, ?)");
-        $this->database->execute($stmt, ["si", $descripcion, $idCategoria]);
+        $stmt = $this->database->prepare("INSERT INTO preguntas (texto, id_categoria, id_estado) VALUES (?, ?, ?)");
+        $this->database->execute($stmt, ["sii", $descripcion, $idCategoria, $idEstado]);
 
         // Obtiene el ID de la pregunta insertada
         $preguntaId = $this->database->getInsertId();
