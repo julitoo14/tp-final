@@ -1,4 +1,4 @@
-/*document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {
     const timerElement = document.getElementById('timer');
     const timeBarFill = document.getElementById('time-bar-fill');
     const totalTime = 20;
@@ -49,4 +49,4 @@
         // Guardar el tiempo restante antes de recargar o cerrar la página
         localStorage.setItem('timeLeft', timeLeft);
     });
-});*/
+});
