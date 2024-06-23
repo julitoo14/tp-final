@@ -94,3 +94,20 @@
     width: 100%;
     transition: width linear;
 }
+
+#ranking{
+        font-size: 5rem; /* Tamaño personalizado */
+}
+
+.custom-column {
+    max-width: 150px !important; /* Ancho máximo deseado para la columna */
+    max-height: 150px !important;
+    margin: 0 auto; /* Centrar la columna */
+    border: 3px solid black;
+    border-radius: 7px;
+}
+
+#cuadrorank{
+    margin-top: 10px;
+    text-align: center;
+}
