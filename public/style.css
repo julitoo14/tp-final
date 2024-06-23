@@ -1,7 +1,19 @@
+body{
+    background-image: url("/public/images/fondo.webp");
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    background-size: cover;
+}
+
 #cerrarSesion{
     position: absolute;
     right: 0;
     padding-bottom: 35px;
+}
+
+.w3-black{
+    background-color:#031b71 !important;
 }
 
 #cerrarSesion:hover{
@@ -95,19 +107,74 @@
     transition: width linear;
 }
 
-#ranking{
+#ranking
+{
         font-size: 5rem; /* Tamaño personalizado */
 }
+
+#play{
+    font-size: 4rem;
+    position: absolute;
+    top: 38%;
+    left: 31%;
+}
+
+#titlejp{
+    position: absolute;
+    top: 0;
+    left: 4%;
+}
+
+#mp{
+   font-size: 5rem;
+    position: absolute;
+    left: 27%;
+    top: 30%;
+}
+
+#titlemp{
+    position: absolute;
+    top: 0;
+    left: 4%;
+}
+
+#jugarPartida,
+#misPartidas{
+    text-align: center;
+    color: aliceblue ;
+}
+
+
 
 .custom-column {
     max-width: 150px !important; /* Ancho máximo deseado para la columna */
     max-height: 150px !important;
     margin: 0 auto; /* Centrar la columna */
-    border: 3px solid black;
+    border: 3px solid #0ba4bf;
     border-radius: 7px;
+    background-color: #15468f;
+    text-decoration: none;
+}
+
+.custom-column:hover{
+    transform: scale(1.05); /* Escala del cuadro al pasar el mouse */
+    background-color: #0490ac;
+    text-decoration: none;
+
+}
+
+a-href{
+    color: white;
 }
 
 #cuadrorank{
     margin-top: 10px;
     text-align: center;
+    color: aliceblue ;
+    text-decoration: none;
+
+}
+
+.row{
+    margin-top: 15px;
 }

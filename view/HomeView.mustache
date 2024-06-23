@@ -5,10 +5,11 @@
 <div class="container">
     <!-- Fila principal -->
     <div class="row">
-        <!-- Columna centralizada -->
-        <div class="col text-center">
-            <h1>Hola, {{username}}!</h1>
-            <p>Puntaje máximo: {{maxScore}}</p>
+        <div class="col-12 text-center content">
+            <h1 style="color: white; font-size: 42px;margin-top: 15px">Hola, {{username}}!</h1>
+            <p style="color: white; display: inline; font-size: 35px">Tu puntaje máximo alcanzado en el ranking es de:
+                <span style="color: #26e7b3;">{{maxScore}} puntos</span>
+            </p>
         </div>
     </div>
 
@@ -23,18 +24,28 @@
         </div>
 
         <!-- Columna de jugar partida -->
-        <div class="col d-flex flex-column align-items-center justify-content-center">
-            <h2>Jugar Partida</h2>
-            <a href="/Game/startGame" class="btn btn-primary mt-3">Jugar Partida</a>
-            <a href="/Preguntas/getCrearPregunta" class="btn btn-secondary mt-3">Crear Pregunta</a>
+        <div class="col d-flex flex-column align-items-center justify-content-center custom-column">
+            <a href="/Game/startGame" id="jugarPartida">
+                <h3 id="titlejp">Jugar Partida</h3>
+                <i class="bi bi-play-circle-fill bi-lg" id="play"></i>
+            </a>
         </div>
 
+
+
+
         <!-- Columna de partidas del usuario -->
-        <div class="col d-flex flex-column align-items-center justify-content-center">
-            <h2>Mis partidas</h2>
-            <a href="/Partidas/getPartidas" class="btn btn-primary mt-3">Mis Partidas</a>
+        <div class="col d-flex flex-column align-items-center justify-content-center custom-column">
+            <a href="/Partidas/getPartidas" id="misPartidas">
+                <h3 id="titlemp">Mis Partidas </h3>
+                <i class="bi bi-list bi-lg" id="mp"></i>
+            </a>
+
         </div>
     </div>
+
+    <a href="/Preguntas/getCrearPregunta" class="btn btn-secondary mt-3">Crear Pregunta</a>
+
 </div>
 
 
