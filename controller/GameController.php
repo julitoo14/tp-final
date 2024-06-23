@@ -38,7 +38,9 @@ class GameController
 
         $preguntaId = $preguntaRandom['_id'];
         $colorCategoria = $this->preguntasModel->getColorCategoria($preguntaId);
+        $nombreCategoria= $this->preguntasModel->getNombreCategoria($preguntaId);
         $respuestas = $this->preguntasModel->getRespuestas($preguntaId);
+
 
         $reporte = null;
         if (isset($_SESSION['reporte'])) {
@@ -47,6 +49,7 @@ class GameController
         }
 
             $this->presenter->render("view/GameView.mustache", [
+            'nombreCategoria' => $nombreCategoria,
             'colorCategoria' => $colorCategoria,
             'pregunta' => $preguntaRandom,
             'respuestas' => $respuestas,

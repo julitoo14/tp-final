@@ -71,6 +71,25 @@ class PreguntasModel
         return $colorCategoria ? $colorCategoria['colorCategoria'] : null;
     }
 
+    public function getNombreCategoria($preguntaId){
+
+            $stmt = $this->database->prepare("
+        SELECT c.nombre
+        FROM preguntas p
+        JOIN categorias c ON p.id_categoria = c.id
+        WHERE p._id = ?
+    ");
+            $stmt->bind_param("i", $preguntaId);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $nombreCategoria = $result->fetch_assoc();
+
+            return $nombreCategoria ? $nombreCategoria['nombre'] : null;
+        }
+
+
+
+
     public function agregarVezJugada($preguntaId)
     {
         $stmt = $this->database->prepare("UPDATE PREGUNTAS SET VECES_JUGADA = VECES_JUGADA + 1 WHERE _ID = ?");
