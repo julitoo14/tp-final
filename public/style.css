@@ -23,14 +23,39 @@ body{
 
 }
 
-#contenedorLogin{
+
+#contenedorLogin {
     position: absolute;
-    width: 50%;
+    width: 43%;
     padding: 20px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transform: translate(-50%, -50%);
     top: 46%;
     left: 50%;
+    border: solid 3px #1d0057;
+    border-radius: 15px;
+    background-color: #34478f !important;
+}
+
+#enviarRta{
+    display: flex;
+    flex-direction: column !important;
+}
+
+#opcionesrtas{
+    cursor: pointer;
+}
+
+#nombreJug{
+    color: white;
+}
+
+#jugadorFila:hover{
+    background-color: #0656cf;
+}
+
+#opcionesrtas:hover{
+    background-color: #3181fd;
 }
 
  #map {

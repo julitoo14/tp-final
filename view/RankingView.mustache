@@ -1,24 +1,26 @@
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
+
+
 <div class="container">
     <div class="row">
         <!-- Columna de ranking -->
         <div class="col">
-            <h2 class="text-center">Ranking</h2>
+            <h2 class="text-center" style="color: white">Ranking</h2>
             <table class="table table-striped">
                 <thead>
                 <tr>
-                    <th scope="col" class="text-center">Usuario</th>
-                    <th scope="col" class="text-center">Puntaje Máximo</th>
+                    <th scope="col" class="text-center" style="color:white;">Usuario</th>
+                    <th scope="col" class="text-center" style="color:white;">Puntaje Máximo</th>
                 </tr>
                 </thead>
                 <tbody>
                 {{#topUsers}}
-                    <tr>
+                    <tr id="jugadorFila">
                         <td class="text-center">
-                            <a href="/UsuarioPerfil/getProfile?username={{USERNAME}}">{{USERNAME}}</a>
+                            <a href="/UsuarioPerfil/getProfile?username={{USERNAME}}" id="nombreJug">{{USERNAME}}</a>
                         </td>
-                        <td class="text-center">{{TOTAL_SCORE}}</td>
+                        <td class="text-center" style="color: white">{{TOTAL_SCORE}}</td>
                     </tr>
                 {{/topUsers}}
                 </tbody>

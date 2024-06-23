@@ -4,28 +4,33 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <script src="/public/cronometro.js"></script>
-<div class="w3-card-4">
-    <div class="" style="background:{{colorCategoria}}">
-        <h2>{{pregunta.texto}}</h2>
+<div class="w3-card-4" style="background:{{colorCategoria}}; text-align: center; margin-top: 50px">
+
+    <div class="">
+            <h1 style="text-align: center; margin-top: 25px">{{nombreCategoria}}</h1>
     </div>
-    <div class="timer-container">
-        <span id="timer">20</span>
-        <div class="time-bar">
-            <div class="time-bar-fill" id="time-bar-fill"></div>
-        </div>
-    </div>
+
+    <h2>{{pregunta.texto}}</h2>
+
+    <!-- <div class="timer-container">
+         <span id="timer">20</span>
+         <div class="time-bar">
+             <div class="time-bar-fill" id="time-bar-fill"></div>
+         </div>
+     </div> -->
+
     <div class="container mt-5">
         <form action="/index.php" method="post">
             <div id="respuestas" class="list-group mb-3">
                 {{#respuestas}}
-                    <div class="list-group-item list-group-item-action respuesta py-3" data-respuesta-id="{{_id}}">{{texto}}</div>
+                    <div class="list-group-item list-group-item-action respuesta py-3" id="opcionesrtas" data-respuesta-id="{{_id}}">{{texto}}</div>
                 {{/respuestas}}
             </div>
             <input type="hidden" id="respuesta-id" name="respuestaId">
             <input type="hidden" id="pregunta-id" name="preguntaId" value="{{pregunta._id}}">
             <input type="hidden" name="controller" value="Game">
             <input type="hidden" name="action" value="postAnswer">
-            <div class="d-flex justify-content-between">
+            <div class="d-flex justify-content-between" id="enviarRta">
                 <button type="submit" class="btn btn-primary">Enviar respuesta</button>
 
 
