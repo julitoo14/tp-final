@@ -203,3 +203,18 @@ a-href{
 .row{
     margin-top: 15px;
 }
+
+#crearPreguntaBoton{
+    margin-top: 3rem!important;
+    position: absolute;
+    left: 47%;
+    background-color: #15468f;
+    border: 3px solid #0ba4bf;
+
+}
+
+#crearPreguntaBoton:hover{
+    transform: scale(1.05); /* Escala del cuadro al pasar el mouse */
+    background-color: #0490ac;
+    text-decoration: none;
+}
