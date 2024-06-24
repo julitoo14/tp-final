@@ -49,4 +49,68 @@ class PreguntasController
             $this->presenter->render("view/CrearPreguntaView.mustache", ['error' => $_SESSION['error']]);
         }
     }
+
+    public function getPreguntasAceptadas()
+    {
+        $username = isset($_SESSION['user']) ? $_SESSION['user'][0]['username'] : null;
+        $data = [
+            'username' => $username,
+            'preguntasAceptadas' => $this->preguntasModel->getPreguntasAceptadas(),
+            'edit' => true
+        ];
+
+        $this->presenter->render("view/PreguntasView.mustache", $data);
+    }
+
+    public function getPreguntasReportadas()
+    {
+        $username = isset($_SESSION['user']) ? $_SESSION['user'][0]['username'] : null;
+        $data = [
+            'username' => $username,
+            'preguntasReportadas' => $this->preguntasModel->getPreguntasReportadas(),
+            'repport' => true
+        ];
+
+        $this->presenter->render("view/PreguntasView.mustache", $data);
+    }
+
+    public function getPreguntasSugeridas()
+    {
+        $username = isset($_SESSION['user']) ? $_SESSION['user'][0]['username'] : null;
+        $data = [
+            'username' => $username,
+            'preguntasSugeridas' => $this->preguntasModel->getPreguntasSugeridas(),
+            'suggested' => true
+        ];
+
+        $this->presenter->render("view/PreguntasView.mustache", $data);
+    }
+
+    private function redirectToQuestionPage($idEstado)
+    {
+        switch ($idEstado) {
+            case 1:
+                $location = "/Preguntas/getPreguntasSugeridas";
+                break;
+            case 2:
+                $location = "/Preguntas/getPreguntasAceptadas";
+                break;
+            case 3:
+                $location = "/Preguntas/getPreguntasReportadas";
+                break;
+            default:
+                $location = "/Preguntas/getPreguntasAceptadas";
+                break;
+        }
+        header("Location: " . $location);
+        exit();
+    }
+
+    public function borrar()
+    {
+        $id = $_POST["id"];
+        $idEstado = $this->preguntasModel->getPregunta($id);
+        $this->preguntasModel->borrarPregunta($id);
+        $this->redirectToQuestionPage($idEstado[0]["id_estado"]);
+    }
 }

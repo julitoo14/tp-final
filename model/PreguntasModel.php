@@ -214,4 +214,105 @@ class PreguntasModel
 
     }
 
+    public function getPreguntasReportadas()
+    {
+        $stmt = $this->database->prepare("SELECT PREGUNTAS.*, RESPUESTAS.texto AS respuesta_texto, RESPUESTAS.opcion AS respuesta_opcion, RESPUESTAS.es_correcta AS es_correcta FROM PREGUNTAS
+                                    INNER JOIN RESPUESTAS ON PREGUNTAS._id = RESPUESTAS.id_pregunta
+                                    WHERE PREGUNTAS.id_estado = 3");
+        $result = $this->database->execute($stmt);
+
+        $preguntas = [];
+        foreach ($result as $row) {
+            if (!isset($preguntas[$row['_id']])) {
+                $preguntas[$row['_id']] = [
+                    'id' => $row['_id'], // Agrega el id de la pregunta aquí
+                    'texto' => $row['texto'],
+                    'opcionA' => '',
+                    'opcionB' => '',
+                    'opcionC' => '',
+                    'opcionD' => '',
+                    'resp_correcta' => ''
+                ];
+            }
+            $preguntas[$row['_id']]['opcion' . $row['respuesta_opcion']] = $row['respuesta_texto'];
+            if ($row['es_correcta'] == 1) {
+                $preguntas[$row['_id']]['resp_correcta'] = $row['respuesta_opcion'];
+            }
+        }
+
+        return array_values($preguntas);
+    }
+
+    public function getPreguntasSugeridas()
+    {
+        $stmt = $this->database->prepare("SELECT PREGUNTAS.*, RESPUESTAS.texto AS respuesta_texto, RESPUESTAS.opcion AS respuesta_opcion, RESPUESTAS.es_correcta AS es_correcta FROM PREGUNTAS
+                                    INNER JOIN RESPUESTAS ON PREGUNTAS._id = RESPUESTAS.id_pregunta
+                                    WHERE PREGUNTAS.id_estado = 1");
+        $result = $this->database->execute($stmt);
+
+        $preguntas = [];
+        foreach ($result as $row) {
+            if (!isset($preguntas[$row['_id']])) {
+                $preguntas[$row['_id']] = [
+                    'id' => $row['_id'], // Agrega el id de la pregunta aquí
+                    'texto' => $row['texto'],
+                    'opcionA' => '',
+                    'opcionB' => '',
+                    'opcionC' => '',
+                    'opcionD' => '',
+                    'resp_correcta' => ''
+                ];
+            }
+            $preguntas[$row['_id']]['opcion' . $row['respuesta_opcion']] = $row['respuesta_texto'];
+            if ($row['es_correcta'] == 1) {
+                $preguntas[$row['_id']]['resp_correcta'] = $row['respuesta_opcion'];
+            }
+        }
+
+        return array_values($preguntas);
+    }
+
+    public function getPreguntasAceptadas()
+    {
+        $stmt = $this->database->prepare("SELECT PREGUNTAS.*, RESPUESTAS.texto AS respuesta_texto, RESPUESTAS.opcion AS respuesta_opcion, RESPUESTAS.es_correcta AS es_correcta FROM PREGUNTAS
+                                    INNER JOIN RESPUESTAS ON PREGUNTAS._id = RESPUESTAS.id_pregunta
+                                    WHERE PREGUNTAS.id_estado = 2");
+        $result = $this->database->execute($stmt);
+
+        $preguntas = [];
+        foreach ($result as $row) {
+            if (!isset($preguntas[$row['_id']])) {
+                $preguntas[$row['_id']] = [
+                    'id' => $row['_id'], // Agrega el id de la pregunta aquí
+                    'texto' => $row['texto'],
+                    'opcionA' => '',
+                    'opcionB' => '',
+                    'opcionC' => '',
+                    'opcionD' => '',
+                    'resp_correcta' => ''
+                ];
+            }
+            $preguntas[$row['_id']]['opcion' . $row['respuesta_opcion']] = $row['respuesta_texto'];
+            if ($row['es_correcta'] == 1) {
+                $preguntas[$row['_id']]['resp_correcta'] = $row['respuesta_opcion'];
+            }
+        }
+
+        return array_values($preguntas);
+    }
+
+    public function borrarPregunta($id){
+        // Primero, borra las preguntas jugadas que hacen referencia a la pregunta
+        $stmt = $this->database->prepare("DELETE FROM preguntas_jugadas WHERE pregunta_id = ?");
+        $this->database->execute($stmt, ["i", $id]);
+
+        // Luego, borra las respuestas asociadas a la pregunta
+        $stmt = $this->database->prepare("DELETE FROM respuestas WHERE id_pregunta = ?");
+        $this->database->execute($stmt, ["i", $id]);
+
+        // Finalmente, borra la pregunta
+        $stmt = $this->database->prepare("DELETE FROM preguntas WHERE _ID = ?");
+        $this->database->execute($stmt, ["i", $id]);
+    }
+
 }
