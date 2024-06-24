@@ -35,11 +35,22 @@ class PartidasModel
         $this->database->execute($stmt, ["ii", $puntos, $partidaId]);
     }
 
-    public function getPartidasByUser($userId)
+    public function getPartidasByUser($userId, $offset = 0, $limit = 14) //CAMBIADO
     {
-        $stmt = $this->database->prepare("SELECT fecha_creacion, puntaje FROM PARTIDAS WHERE USER_ID = ? ORDER BY fecha_creacion DESC");
-        return $this->database->execute($stmt, ["i", $userId]);
+        $stmt = $this->database->prepare("SELECT fecha_creacion, puntaje FROM PARTIDAS WHERE USER_ID = ? ORDER BY fecha_creacion DESC LIMIT ?, ?");
+        $stmt->bind_param("iii", $userId, $offset, $limit);
+        return $this->database->execute($stmt);
     }
+
+    public function countPartidasByUser($userId)
+    {
+        $stmt = $this->database->prepare("SELECT COUNT(*) as total FROM PARTIDAS WHERE USER_ID = ?");
+        $stmt->bind_param("i", $userId);
+        $result = $this->database->execute($stmt);
+        return $result[0]['total'];
+    }
+
+
 
     public function reportarPregunta($idPregunta)
     {

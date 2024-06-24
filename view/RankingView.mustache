@@ -6,12 +6,12 @@
     <div class="row">
         <!-- Columna de ranking -->
         <div class="col">
-            <h2 class="text-center" style="color: white">Ranking</h2>
+            <h2 class="text-center" style="color: white;background: black; margin: 0; border: 2px solid white; border-bottom: none">Ranking</h2>
             <table class="table table-striped">
                 <thead>
                 <tr>
-                    <th scope="col" class="text-center" style="color:white;">Usuario</th>
-                    <th scope="col" class="text-center" style="color:white;">Puntaje Máximo</th>
+                    <th scope="col" class="text-center" style="color:white; background: black; border-left: 2px solid white">Usuario</th>
+                    <th scope="col" class="text-center" style="color:white; background: black; border-right: white 2px solid">Puntaje Máximo</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -20,13 +20,13 @@
                         <td class="text-center">
                             <a href="/UsuarioPerfil/getProfile?username={{USERNAME}}" id="nombreJug">{{USERNAME}}</a>
                         </td>
-                        <td class="text-center" style="color: white">{{TOTAL_SCORE}}</td>
+                        <td class="text-center" style="background: white">{{TOTAL_SCORE}}</td>
                     </tr>
                 {{/topUsers}}
                 </tbody>
             </table>
             <div class="text-center">
-                <a href="/Home" class="btn btn-primary">Volver a Inicio</a>
+                <a href="/Home" class="btn btn-secondary">Volver a Inicio</a>
             </div>
         </div>
     </div>

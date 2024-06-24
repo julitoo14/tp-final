@@ -47,15 +47,27 @@ body{
 }
 
 #nombreJug{
-    color: white;
+    color: black;
 }
 
-#jugadorFila:hover{
+#jugadorFila{
     background-color: #0656cf;
 }
 
 #opcionesrtas:hover{
     background-color: #3181fd;
+}
+
+.btn-secondary{
+    background-color: #15468f !important;
+    color: white !important;
+    border: 3px solid #0ba4bf !important;
+}
+
+.btn-secondary:hover{
+    background-color: #0490ac !important;
+    text-decoration: none;
+
 }
 
  #map {
@@ -218,3 +230,16 @@ a-href{
     background-color: #0490ac;
     text-decoration: none;
 }
+
+ .d-flex.justify-content-between .pagination-button {
+     flex-basis: 15%;
+ }
+.d-flex.justify-content-between h2 {
+    flex-grow: 1;
+    text-align: center;
+    margin-bottom: 0;
+}
+.pagination-button.text-right {
+    text-align: right;
+}
+

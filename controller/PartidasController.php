@@ -17,12 +17,26 @@ class PartidasController
     {
         $username = isset($_SESSION['user']) ? $_SESSION['user'][0]['username'] : null;
         $userId = isset($_SESSION['user']) ? $_SESSION['user'][0]['_id'] : null;
-        $partidas = $this->partidasModel->getPartidasByUser($userId);
+
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $limit = 13;
+        $offset = ($page - 1) * $limit;
+
+        $partidas = $this->partidasModel->getPartidasByUser($userId, $offset, $limit);
+        $totalPartidas = $this->partidasModel->countPartidasByUser($userId);
+        $totalPages = ceil($totalPartidas / $limit);
+
         $this->presenter->render("view/PartidasView.mustache", [
             'username' => $username,
-            'partidas' => $partidas
+            'partidas' => $partidas,
+            'currentPage' => $page,
+            'totalPages' => $totalPages,
+            'prevPage' => $page > 1 ? $page - 1 : null,
+            'nextPage' => $page < $totalPages ? $page + 1 : null
         ]);
     }
+
+
 
     public function reportarPregunta()
     {
