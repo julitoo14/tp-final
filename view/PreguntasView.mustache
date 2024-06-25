@@ -2,7 +2,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
 <main class="py-5">
-    <div class="content container px-lg-5 p-4 bg-light rounded-3">
+    <div class="content container px-lg-5 p-4 bg-light rounded-3 w3-card-4 py-5">
         <article class="mx-auto">
             <br>
             <div class="d-flex">
@@ -44,13 +44,21 @@
                             </button>
                             </form>
 
-                            <button type="submit" name="action" value="edit" class="btn btn-primary" title="Editar">
-                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                            </button>
+                            <form action="/index.php" method="post" class="d-inline-block me-2">
+                                <input type="hidden" name="id" value="{{id}}">
+                                <input type="hidden" name="controller" value="Preguntas">
+                                <button type="submit" name="action" value="irAEditarPregunta" class="btn btn-primary" title="Editar">
+                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                </button>
+                            </form>
 
-                            <button type="submit" name="action" value="accept" class="btn btn-primary" title="Aceptar">
-                                <i class="fa fa-check" aria-hidden="true"></i>
-                            </button>
+                            <form action="/index.php" method="post" class="d-inline-block me-2">
+                                <input type="hidden" name="id" value="{{id}}">
+                                <input type="hidden" name="controller" value="Preguntas">
+                                <button type="submit" name="action" value="aceptar" class="btn btn-primary" title="Aceptar">
+                                    <i class="fa fa-check" aria-hidden="true"></i>
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 {{/preguntasSugeridas}}
@@ -67,20 +75,26 @@
                             <form action="/index.php" method="post" class="d-inline-block me-2">
                                 <input type="hidden" name="id" value="{{id}}">
                                 <input type="hidden" name="controller" value="Preguntas">
-                                <input type="hidden" name="action" value="borrar">
                                 <button type="submit" name="action" value="borrar" class="btn btn-primary" title="Borrar">
                                     <i class="fas fa-trash" aria-hidden="true"></i>
                                 </button>
                             </form>
 
-                            <button type="submit" name="action" value="edit" class="btn btn-primary" title="Editar">
-                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                            </button>
+                            <form action="/index.php" method="post" class="d-inline-block me-2">
+                                <input type="hidden" name="id" value="{{id}}">
+                                <input type="hidden" name="controller" value="Preguntas">
+                                <button type="submit" name="action" value="irAEditarPregunta" class="btn btn-primary" title="Editar">
+                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                </button>
+                            </form>
 
-
-                            <button type="submit" name="action" value="accept" class="btn btn-primary" title="Aceptar">
-                                <i class="fa fa-check" aria-hidden="true"></i>
-                            </button>
+                            <form action="/index.php" method="post" class="d-inline-block me-2">
+                                <input type="hidden" name="id" value="{{id}}">
+                                <input type="hidden" name="controller" value="Preguntas">
+                                <button type="submit" name="action" value="aceptar" class="btn btn-primary" title="Aceptar">
+                                    <i class="fa fa-check" aria-hidden="true"></i>
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 {{/preguntasReportadas}}
@@ -103,9 +117,13 @@
                                 </button>
                             </form>
 
-                            <button type="submit" name="action" value="edit" class="btn btn-primary" title="Editar">
-                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                            </button>
+                            <form action="/index.php" method="post" class="d-inline-block me-2">
+                                <input type="hidden" name="id" value="{{id}}">
+                                <input type="hidden" name="controller" value="Preguntas">
+                                <button type="submit" name="action" value="irAEditarPregunta" class="btn btn-primary" title="Editar">
+                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 {{/preguntasAceptadas}}

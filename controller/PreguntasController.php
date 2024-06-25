@@ -113,4 +113,55 @@ class PreguntasController
         $this->preguntasModel->borrarPregunta($id);
         $this->redirectToQuestionPage($idEstado[0]["id_estado"]);
     }
+
+    public function aceptar()
+    {
+        $id = $_POST["id"];
+        $idEstado = $this->preguntasModel->getPregunta($id);
+        $this->preguntasModel->aceptarPregunta($id);
+        $this->redirectToQuestionPage($idEstado[0]["id_estado"]);
+    }
+
+    public function irAEditarPregunta(){
+        $id = $_POST["id"];
+        $username = isset($_SESSION['user']) ? $_SESSION['user'][0]['username'] : null;
+        $data = [
+            'username' => $username,
+            'edit' => true
+        ];
+
+        if ($id !== null){
+            $data['pregunta'] =  $this->preguntasModel->getPreguntaYRespuestas($id);
+        }
+        $this->presenter->render("view/EditarPreguntaView.mustache", $data);
+    }
+
+    public function editar(){
+        $requiredParams = ['id', 'descripcion', 'id_categoria', 'opcionA', 'opcionB', 'opcionC', 'opcionD', 'resp_correcta'];
+
+        foreach ($requiredParams as $param) {
+            if (!isset($_POST[$param]) || empty($_POST[$param])) {
+                echo "No se pudo editar, falta el parámetro: " . $param;
+            }
+        }
+        $id = $_POST['id'];
+        $descripcion = $_POST['descripcion'];
+        $idCategoria = $_POST['id_categoria'];
+        $opcionA = $_POST['opcionA'];
+        $opcionB = $_POST['opcionB'];
+        $opcionC = $_POST['opcionC'];
+        $opcionD = $_POST['opcionD'];
+        $respCorrecta = $_POST['resp_correcta'];
+        $idEstado=$this->preguntasModel->getPregunta($id);
+
+        $this->preguntasModel->editarPregunta($id, $descripcion, $idCategoria, $opcionA, $opcionB, $opcionC, $opcionD, $respCorrecta);
+
+        // Restablece los parámetros a su estado original
+        foreach ($requiredParams as $param) {
+            unset($_POST[$param]);
+        }
+
+        $this->redirectToQuestionPage($idEstado[0]["id_estado"]);
+
+    }
 }

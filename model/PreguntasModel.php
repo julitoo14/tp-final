@@ -315,4 +315,59 @@ class PreguntasModel
         $this->database->execute($stmt, ["i", $id]);
     }
 
+    public function aceptarPregunta($id)
+    {
+        $stmt = $this->database->prepare("UPDATE preguntas SET id_estado = 2 WHERE _id = ?");
+        $this->database->execute($stmt, ["i", $id]);
+    }
+
+    public function getPreguntaYRespuestas($id){
+        $stmt = $this->database->prepare("SELECT PREGUNTAS.*, RESPUESTAS.texto AS respuesta_texto, RESPUESTAS.opcion AS respuesta_opcion, RESPUESTAS.es_correcta AS es_correcta FROM PREGUNTAS
+                                INNER JOIN RESPUESTAS ON PREGUNTAS._id = RESPUESTAS.id_pregunta
+                                WHERE PREGUNTAS._id = ?");
+        $result = $this->database->execute($stmt, ["i", $id]);
+
+        $pregunta = [];
+        foreach ($result as $row) {
+            if (empty($pregunta)) {
+                $pregunta = [
+                    'id' => $row['_id'], // Agrega el id de la pregunta aquí
+                    'texto' => $row['texto'],
+                    'opcionA' => '',
+                    'opcionB' => '',
+                    'opcionC' => '',
+                    'opcionD' => '',
+                    'resp_correcta' => ''
+                ];
+            }
+            $pregunta['opcion' . $row['respuesta_opcion']] = $row['respuesta_texto'];
+            if ($row['es_correcta'] == 1) {
+                $pregunta['resp_correcta'] = $row['respuesta_opcion'];
+            }
+        }
+
+        return $pregunta;
+    }
+
+    public function editarPregunta($id, $descripcion, $idCategoria, $opcionA, $opcionB, $opcionC, $opcionD, $respCorrecta)
+    {
+        // Actualiza la pregunta en la tabla de preguntas
+        $stmt = $this->database->prepare("UPDATE preguntas SET texto = ?, id_categoria = ? WHERE _id = ?");
+        $this->database->execute($stmt, ["sii", $descripcion, $idCategoria, $id]);
+
+        // Borra las respuestas existentes
+        $stmt = $this->database->prepare("DELETE FROM respuestas WHERE id_pregunta = ?");
+        $this->database->execute($stmt, ["i", $id]);
+
+        // Prepara el statement para insertar las nuevas respuestas
+        $stmt = $this->database->prepare("INSERT INTO respuestas (texto, opcion, es_correcta, id_pregunta) VALUES (?, ?, ?, ?)");
+
+        // Inserta cada respuesta en la tabla de respuestas
+        $opciones = ['A' => $opcionA, 'B' => $opcionB, 'C' => $opcionC, 'D' => $opcionD];
+        foreach ($opciones as $opcion => $texto) {
+            $esCorrecta = ($opcion === $respCorrecta) ? 1 : 0;
+            $this->database->execute($stmt, ["ssii", $texto, $opcion, $esCorrecta, $id]);
+        }
+    }
+
 }
