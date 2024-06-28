@@ -5,15 +5,17 @@
         <h1 class="text-center display-2 fw-bold">¡Bienvenido {{username}}!</h1>
         <h2 class="text-center">¿Qué deseas consultar hoy?</h2>
         <article class="d-grid gap-2 col-6 mx-auto mt-4">
-            <a href="/Users/getAdminDashboard" class="btn btn-outline-primary btn-lg btn-block mb-3">Dashboard de Administración</a>
+            <button type="button" class="btn btn-outline-primary btn-lg btn-block mb-3" data-toggle="modal" data-target="#adminDashboardModal">
+                Dashboard de Administración
+            </button>
 
-            <!-- Botón para abrir el modal -->
             <button type="button" class="btn btn-outline-primary btn-lg btn-block mb-3" data-toggle="modal" data-target="#usuariosNuevosModal">
                 Usuarios Nuevos
             </button>
 
-            <!-- Cambiar el botón para redirigir a la acción mostrarPorcentajeAciertos -->
-            <a href="/Users/mostrarPorcentajeAciertos" class="btn btn-outline-primary btn-lg btn-block mb-3">Porcentaje de Aciertos por Jugador</a>
+            <button type="button" class="btn btn-outline-primary btn-lg btn-block mb-3" data-toggle="modal" data-target="#porcentajeAciertosModal">
+                Porcentaje de Aciertos por Jugador
+            </button>
         </article>
     </div>
 </main>
@@ -29,6 +31,66 @@
                 </button>
             </div>
             <form action="/Users/getUsuariosNuevos" method="GET">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="fecha_inicio">Fecha de Inicio</label>
+                        <input type="date" class="form-control" id="fecha_inicio" name="fecha_inicio" required value="2024-01-01">
+                    </div>
+                    <div class="form-group">
+                        <label for="fecha_fin">Fecha de Fin</label>
+                        <input type="date" class="form-control" id="fecha_fin" name="fecha_fin" required value="2024-12-31">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Consultar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para ingresar fechas de Dashboard de Administración -->
+<div class="modal fade" id="adminDashboardModal" tabindex="-1" role="dialog" aria-labelledby="adminDashboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="adminDashboardModalLabel">Dashboard de Administración - Selección de Fechas</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="/Users/getAdminDashboard" method="GET">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="fecha_inicio">Fecha de Inicio</label>
+                        <input type="date" class="form-control" id="fecha_inicio" name="fecha_inicio" required value="2024-01-01">
+                    </div>
+                    <div class="form-group">
+                        <label for="fecha_fin">Fecha de Fin</label>
+                        <input type="date" class="form-control" id="fecha_fin" name="fecha_fin" required value="2024-12-31">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Consultar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para ingresar fechas de Porcentaje de Aciertos por Jugador -->
+<div class="modal fade" id="porcentajeAciertosModal" tabindex="-1" role="dialog" aria-labelledby="porcentajeAciertosModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="porcentajeAciertosModalLabel">Porcentaje de Aciertos por Jugador - Selección de Fechas</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="/Users/mostrarPorcentajeAciertos" method="GET">
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="fecha_inicio">Fecha de Inicio</label>

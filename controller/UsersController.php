@@ -116,14 +116,19 @@ class UsersController
 
     public function getAdminDashboard()
     {
+
+        // Obtener las fechas desde la solicitud GET
+        $fecha_inicio = $_GET['fecha_inicio'];
+        $fecha_fin = $_GET['fecha_fin'];
+
         // Obtener las estadísticas necesarias
-        $cantidadJugadores = $this->model->getCantidadJugadores();
-        $cantidadPartidas = $this->model->getCantidadPartidas();
+        $cantidadJugadores = $this->model->getCantidadJugadores($fecha_inicio, $fecha_fin);
+        $cantidadPartidas = $this->model->getCantidadPartidas($fecha_inicio, $fecha_fin);
         $cantidadPreguntas = $this->model->getCantidadPreguntas();
-        $cantidadPreguntasCreadas = $this->model->getCantidadPreguntasCreadas();
-        $usuariosPorPais = $this->model->getCantidadUsuariosPorPais();
-        $usuariosPorSexo = $this->model->getCantidadUsuariosPorSexo();
-        $usuariosPorGrupoEdad = $this->model->getCantidadUsuariosPorGrupoEdad();
+        $cantidadPreguntasCreadas = $this->model->getCantidadPreguntasCreadas($fecha_inicio, $fecha_fin);
+        $usuariosPorPais = $this->model->getCantidadUsuariosPorPais($fecha_inicio, $fecha_fin);
+        $usuariosPorSexo = $this->model->getCantidadUsuariosPorSexo($fecha_inicio, $fecha_fin);
+        $usuariosPorGrupoEdad = $this->model->getCantidadUsuariosPorGrupoEdad($fecha_inicio, $fecha_fin);
 
         // Aquí se obtiene la lista de jugadores
 
@@ -155,8 +160,13 @@ class UsersController
     }
 
     public function mostrarPorcentajeAciertos() {
-        $datosJugadores = $this->model->getDatosJugadoresConPorcentajeAciertos();
-        $this->presenter->render("PorcentajeAciertosView.mustache", ["datosJugadores" => $datosJugadores]);
+
+        // Obtener las fechas desde la solicitud GET
+        $fecha_inicio = $_GET['fecha_inicio'];
+        $fecha_fin = $_GET['fecha_fin'];
+
+        $datosJugadores = $this->model->getDatosJugadoresConPorcentajeAciertos($fecha_inicio, $fecha_fin);
+        $this->presenter->render("view/PorcentajeAciertosView.mustache", ["datosJugadores" => $datosJugadores]);
     }
 
 }

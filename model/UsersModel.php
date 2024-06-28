@@ -116,16 +116,16 @@ class UsersModel
 
     // Funciones para obtener estadísticas
 
-    public function getCantidadJugadores()
+    public function getCantidadJugadores($fecha_inicio, $fecha_fin)
     {
-        $stmt = $this->database->prepare("SELECT COUNT(*) as total_jugadores FROM USUARIOS");
-        return $this->database->execute($stmt)[0]['total_jugadores'];
+        $stmt = $this->database->prepare("SELECT COUNT(*) as total_jugadores FROM USUARIOS WHERE fecha_creacion BETWEEN ? AND ?");
+        return $this->database->execute($stmt, ["ss", $fecha_inicio, $fecha_fin])[0]['total_jugadores'];
     }
 
-    public function getCantidadPartidas()
+    public function getCantidadPartidas($fecha_inicio, $fecha_fin)
     {
-        $stmt = $this->database->prepare("SELECT COUNT(*) as total_partidas FROM PARTIDAS");
-        return $this->database->execute($stmt)[0]['total_partidas'];
+        $stmt = $this->database->prepare("SELECT COUNT(*) as total_partidas FROM PARTIDAS WHERE fecha_creacion BETWEEN ? AND ?");
+        return $this->database->execute($stmt, ["ss", $fecha_inicio, $fecha_fin])[0]['total_partidas'];
     }
 
     public function getCantidadPreguntas()
@@ -134,10 +134,10 @@ class UsersModel
         return $this->database->execute($stmt)[0]['total_preguntas'];
     }
 
-    public function getCantidadPreguntasCreadas()
+    public function getCantidadPreguntasCreadas($fecha_inicio, $fecha_fin)
     {
-        $stmt = $this->database->prepare("SELECT COUNT(*) as total_preguntas_creadas FROM PREGUNTAS");
-        return $this->database->execute($stmt)[0]['total_preguntas_creadas'];
+        $stmt = $this->database->prepare("SELECT COUNT(*) as total_preguntas_creadas FROM PREGUNTAS WHERE fecha_creacion BETWEEN ? AND ?");
+        return $this->database->execute($stmt, ["ss", $fecha_inicio, $fecha_fin])[0]['total_preguntas_creadas'];
     }
 
     public function getCantidadUsuariosNuevos($fecha_inicio, $fecha_fin)
@@ -149,19 +149,19 @@ class UsersModel
 
 
 
-    public function getCantidadUsuariosPorPais()
+    public function getCantidadUsuariosPorPais($fecha_inicio, $fecha_fin)
     {
-        $stmt = $this->database->prepare("SELECT COUNTRY, COUNT(*) as total_usuarios FROM USUARIOS GROUP BY COUNTRY");
-        return $this->database->execute($stmt);
+        $stmt = $this->database->prepare("SELECT COUNTRY, COUNT(*) as total_usuarios FROM USUARIOS WHERE fecha_creacion BETWEEN ? AND ? GROUP BY COUNTRY");
+        return $this->database->execute($stmt, ["ss", $fecha_inicio, $fecha_fin]);
     }
 
-    public function getCantidadUsuariosPorSexo()
+    public function getCantidadUsuariosPorSexo($fecha_inicio, $fecha_fin)
     {
-        $stmt = $this->database->prepare("SELECT GENDER, COUNT(*) as total_usuarios FROM USUARIOS GROUP BY GENDER");
-        return $this->database->execute($stmt);
+        $stmt = $this->database->prepare("SELECT GENDER, COUNT(*) as total_usuarios FROM USUARIOS WHERE fecha_creacion BETWEEN ? AND ? GROUP BY GENDER ");
+        return $this->database->execute($stmt, ["ss", $fecha_inicio, $fecha_fin]);
     }
 
-    public function getCantidadUsuariosPorGrupoEdad()
+    public function getCantidadUsuariosPorGrupoEdad($fecha_inicio, $fecha_fin)
     {
         $stmt = $this->database->prepare("
             SELECT 
@@ -172,20 +172,21 @@ class UsersModel
                 END as grupo_edad,
                 COUNT(*) as total_usuarios 
             FROM USUARIOS 
+            WHERE fecha_creacion BETWEEN ? AND ?
             GROUP BY grupo_edad
         ");
-        return $this->database->execute($stmt);
-    }
+        return $this->database->execute($stmt, ["ss", $fecha_inicio, $fecha_fin]);    }
 
-    public function getDatosJugadoresConPorcentajeAciertos() {
+    public function getDatosJugadoresConPorcentajeAciertos($fecha_inicio, $fecha_fin) {
         $stmt = $this->database->prepare("
-        SELECT 
-            _ID, 
-            USERNAME, 
-            PREGUNTAS_JUGADAS, 
-            PREGUNTAS_ACERTADAS, 
+        SELECT
+            _ID,
+            USERNAME,
+            PREGUNTAS_JUGADAS,
+            PREGUNTAS_ACERTADAS,
             (PREGUNTAS_ACERTADAS / PREGUNTAS_JUGADAS) * 100 AS PORCENTAJE_ACIERTOS
         FROM USUARIOS
+        WHERE ROL = 3
     ");
         return $this->database->execute($stmt);
     }
