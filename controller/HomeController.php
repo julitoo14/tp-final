@@ -40,6 +40,14 @@ class HomeController
                 'mensaje' => $mensaje,
                 'puntaje' => $puntaje,
             ]);
+        } else if ($roleId == 2) { // Admin
+            $this->presenter->render("view/HomeAdminView.mustache", [
+                'username' => $username,
+                'maxScore' => $maxScore,
+                'topUsers' => $topUsers,
+                'mensaje' => $mensaje,
+                'puntaje' => $puntaje,
+            ]);
         }
         $_SESSION['mensaje'] = null;
     }

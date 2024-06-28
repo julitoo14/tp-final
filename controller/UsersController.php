@@ -112,4 +112,51 @@ class UsersController
         header("Location: /Users/getLogin");
     }
 
+    // Métodos para el panel de administración
+
+    public function getAdminDashboard()
+    {
+        // Obtener las estadísticas necesarias
+        $cantidadJugadores = $this->model->getCantidadJugadores();
+        $cantidadPartidas = $this->model->getCantidadPartidas();
+        $cantidadPreguntas = $this->model->getCantidadPreguntas();
+        $cantidadPreguntasCreadas = $this->model->getCantidadPreguntasCreadas();
+        $usuariosPorPais = $this->model->getCantidadUsuariosPorPais();
+        $usuariosPorSexo = $this->model->getCantidadUsuariosPorSexo();
+        $usuariosPorGrupoEdad = $this->model->getCantidadUsuariosPorGrupoEdad();
+
+        // Aquí se obtiene la lista de jugadores
+
+        // Renderizar la vista del panel de administración con los datos obtenidos
+        $this->presenter->render("view/AdminDashboardView.mustache", [
+            'cantidadJugadores' => $cantidadJugadores,
+            'cantidadPartidas' => $cantidadPartidas,
+            'cantidadPreguntas' => $cantidadPreguntas,
+            'cantidadPreguntasCreadas' => $cantidadPreguntasCreadas,
+            'usuariosPorPais' => $usuariosPorPais,
+            'usuariosPorSexo' => $usuariosPorSexo,
+            'usuariosPorGrupoEdad' => $usuariosPorGrupoEdad
+        ]);
+
+    }
+
+    public function getUsuariosNuevos()
+    {
+        // Obtener las fechas desde la solicitud GET
+        $fecha_inicio = $_GET['fecha_inicio'];
+        $fecha_fin = $_GET['fecha_fin'];
+
+
+        // Llamar al método del modelo para obtener la cantidad de usuarios nuevos
+        $cantidadUsuariosNuevos = $this->model->getCantidadUsuariosNuevos($fecha_inicio, $fecha_fin);
+
+        // Renderizar la vista con los resultados obtenidos
+        $this->presenter->render("view/UsuariosNuevosView.mustache", ['cantidadUsuariosNuevos' => $cantidadUsuariosNuevos]);
+    }
+
+    public function mostrarPorcentajeAciertos() {
+        $datosJugadores = $this->model->getDatosJugadoresConPorcentajeAciertos();
+        $this->presenter->render("PorcentajeAciertosView.mustache", ["datosJugadores" => $datosJugadores]);
+    }
+
 }

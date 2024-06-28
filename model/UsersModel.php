@@ -26,7 +26,7 @@ class UsersModel
 
         $roleId = 3; // Establece el rol por defecto a 3
 
-        $stmt = $this->database->prepare("INSERT INTO `USUARIOS`(`USERNAME`, `PASSWORD`, `EMAIL`, `NAME`, `SURNAME`,`HASH`,`PROFILE_PIC`,`BIRTH_YEAR`, `GENDER`, `COUNTRY`, `CITY`, `LATITUDE`, `LONGITUDE`, `ROL`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt = $this->database->prepare("INSERT INTO `USUARIOS`(`USERNAME`, `PASSWORD`, `EMAIL`, `NAME`, `SURNAME`,`HASH`,`PROFILE_PIC`,`BIRTH_YEAR`, `GENDER`, `COUNTRY`, `CITY`, `LATITUDE`, `LONGITUDE`, `ROL`, `fecha_creacion`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
         $this->database->execute($stmt, ["sssssssisssddi", $username, $password, $email, $name, $surname, $hash, $profile_pic, $birth_year, $gender, $country, $city, $latitude, $longitude, $roleId]);
         return true;
     }
@@ -53,7 +53,8 @@ class UsersModel
         $this->actualizarDificultad($userId);
     }
 
-    public function actualizarDificultad($userId){
+    public function actualizarDificultad($userId)
+    {
         // Obtén el número de veces que el usuario ha respondido preguntas
         $stmt = $this->database->prepare("SELECT PREGUNTAS_JUGADAS FROM USUARIOS WHERE _ID = ?");
         $preguntasJugadas = $this->database->execute($stmt, ["i", $userId])[0]['PREGUNTAS_JUGADAS'];
@@ -103,7 +104,6 @@ class UsersModel
 
     public function getMaxScore($userId)
     {
-
         $stmt = $this->database->prepare("SELECT MAX(puntaje) as MAX_SCORE FROM PARTIDAS WHERE USER_ID = ?");
         return $this->database->execute($stmt, ["i", $userId])[0]['MAX_SCORE'];
     }
@@ -113,4 +113,82 @@ class UsersModel
         $stmt = $this->database->prepare("SELECT USERNAME, SUM(puntaje) as TOTAL_SCORE FROM USUARIOS JOIN PARTIDAS ON USUARIOS._ID = PARTIDAS.USER_ID GROUP BY USERNAME ORDER BY TOTAL_SCORE DESC");
         return $this->database->execute($stmt);
     }
+
+    // Funciones para obtener estadísticas
+
+    public function getCantidadJugadores()
+    {
+        $stmt = $this->database->prepare("SELECT COUNT(*) as total_jugadores FROM USUARIOS");
+        return $this->database->execute($stmt)[0]['total_jugadores'];
+    }
+
+    public function getCantidadPartidas()
+    {
+        $stmt = $this->database->prepare("SELECT COUNT(*) as total_partidas FROM PARTIDAS");
+        return $this->database->execute($stmt)[0]['total_partidas'];
+    }
+
+    public function getCantidadPreguntas()
+    {
+        $stmt = $this->database->prepare("SELECT COUNT(*) as total_preguntas FROM PREGUNTAS");
+        return $this->database->execute($stmt)[0]['total_preguntas'];
+    }
+
+    public function getCantidadPreguntasCreadas()
+    {
+        $stmt = $this->database->prepare("SELECT COUNT(*) as total_preguntas_creadas FROM PREGUNTAS");
+        return $this->database->execute($stmt)[0]['total_preguntas_creadas'];
+    }
+
+    public function getCantidadUsuariosNuevos($fecha_inicio, $fecha_fin)
+    {
+        $stmt = $this->database->prepare("SELECT COUNT(*) as total_usuarios_nuevos FROM USUARIOS WHERE fecha_creacion BETWEEN ? AND ?");
+        return $this->database->execute($stmt, ["ss", $fecha_inicio, $fecha_fin])[0]['total_usuarios_nuevos'];
+    }
+
+
+
+
+    public function getCantidadUsuariosPorPais()
+    {
+        $stmt = $this->database->prepare("SELECT COUNTRY, COUNT(*) as total_usuarios FROM USUARIOS GROUP BY COUNTRY");
+        return $this->database->execute($stmt);
+    }
+
+    public function getCantidadUsuariosPorSexo()
+    {
+        $stmt = $this->database->prepare("SELECT GENDER, COUNT(*) as total_usuarios FROM USUARIOS GROUP BY GENDER");
+        return $this->database->execute($stmt);
+    }
+
+    public function getCantidadUsuariosPorGrupoEdad()
+    {
+        $stmt = $this->database->prepare("
+            SELECT 
+                CASE 
+                    WHEN YEAR(CURDATE()) - birth_year < 18 THEN 'Menores'
+                    WHEN YEAR(CURDATE()) - birth_year > 60 THEN 'Jubilados'
+                    ELSE 'Medio'
+                END as grupo_edad,
+                COUNT(*) as total_usuarios 
+            FROM USUARIOS 
+            GROUP BY grupo_edad
+        ");
+        return $this->database->execute($stmt);
+    }
+
+    public function getDatosJugadoresConPorcentajeAciertos() {
+        $stmt = $this->database->prepare("
+        SELECT 
+            _ID, 
+            USERNAME, 
+            PREGUNTAS_JUGADAS, 
+            PREGUNTAS_ACERTADAS, 
+            (PREGUNTAS_ACERTADAS / PREGUNTAS_JUGADAS) * 100 AS PORCENTAJE_ACIERTOS
+        FROM USUARIOS
+    ");
+        return $this->database->execute($stmt);
+    }
+
 }
+?>
