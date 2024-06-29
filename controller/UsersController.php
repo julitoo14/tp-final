@@ -120,6 +120,8 @@ class UsersController
         // Obtener las fechas desde la solicitud GET
         $fecha_inicio = $_GET['fecha_inicio'];
         $fecha_fin = $_GET['fecha_fin'];
+        $_SESSION['fecha_inicio'] = $fecha_inicio;
+        $_SESSION['fecha_fin'] = $fecha_fin;
 
         // Obtener las estadísticas necesarias
         $cantidadJugadores = $this->model->getCantidadJugadores($fecha_inicio, $fecha_fin);
@@ -150,6 +152,8 @@ class UsersController
         // Obtener las fechas desde la solicitud GET
         $fecha_inicio = $_GET['fecha_inicio'];
         $fecha_fin = $_GET['fecha_fin'];
+        $_SESSION['fecha_inicio'] = $fecha_inicio;
+        $_SESSION['fecha_fin'] = $fecha_fin;
 
 
         // Llamar al método del modelo para obtener la cantidad de usuarios nuevos
@@ -164,9 +168,154 @@ class UsersController
         // Obtener las fechas desde la solicitud GET
         $fecha_inicio = $_GET['fecha_inicio'];
         $fecha_fin = $_GET['fecha_fin'];
+        $_SESSION['fecha_inicio'] = $fecha_inicio;
+        $_SESSION['fecha_fin'] = $fecha_fin;
 
         $datosJugadores = $this->model->getDatosJugadoresConPorcentajeAciertos($fecha_inicio, $fecha_fin);
         $this->presenter->render("view/PorcentajeAciertosView.mustache", ["datosJugadores" => $datosJugadores]);
     }
 
+    public function exportarPorcentajeAciertos() {
+
+        $fecha_inicio = $_SESSION['fecha_inicio'];
+        $fecha_fin = $_SESSION['fecha_fin'];
+
+        $datosJugadores = $this->model->getDatosJugadoresConPorcentajeAciertos($fecha_inicio, $fecha_fin);
+
+        // Incluir el archivo de ayuda
+        require_once 'helper\porcentajeDeAciertos.php';
+
+        // Crear un nuevo documento PDF
+        $pdf = new PdfHelper();
+
+        // Agregar una página
+        $pdf->AddPage();
+
+        // Establecer la fuente
+        $pdf->SetFont('Arial', 'B', 9);
+
+        // Agregar la cabecera de la tabla
+        $pdf->Cell(10, 10, 'ID', 1);
+        $pdf->Cell(60, 10, 'Nombre de Usuario', 1);
+        $pdf->Cell(40, 10, 'Preguntas Jugadas', 1);
+        $pdf->Cell(40, 10, 'Preguntas Acertadas', 1);
+        $pdf->Cell(40, 10, 'Porcentaje de Aciertos', 1);
+        $pdf->Ln(); // Nueva línea
+
+        // Agregar las filas de la tabla
+        foreach ($datosJugadores as $jugador) {
+            $pdf->Cell(10, 10, $jugador['_ID'], 1);
+            $pdf->Cell(60, 10, $jugador['USERNAME'], 1);
+            $pdf->Cell(40, 10, $jugador['PREGUNTAS_JUGADAS'], 1);
+            $pdf->Cell(40, 10, $jugador['PREGUNTAS_ACERTADAS'], 1);
+            $pdf->Cell(40, 10, $jugador['PORCENTAJE_ACIERTOS'] . '%', 1);
+            $pdf->Ln(); // Nueva línea
+        }
+
+        // Enviar el documento PDF al navegador
+        $pdf->Output();
+    }
+
+    public function exportarAdminDashboard() {
+
+        $fecha_inicio = $_SESSION['fecha_inicio'];
+        $fecha_fin = $_SESSION['fecha_fin'];
+
+        $cantidadJugadores = $this->model->getCantidadJugadores($fecha_inicio, $fecha_fin);
+        $cantidadPartidas = $this->model->getCantidadPartidas($fecha_inicio, $fecha_fin);
+        $cantidadPreguntas = $this->model->getCantidadPreguntas();
+        $cantidadPreguntasCreadas = $this->model->getCantidadPreguntasCreadas($fecha_inicio, $fecha_fin);
+        $usuariosPorPais = $this->model->getCantidadUsuariosPorPais($fecha_inicio, $fecha_fin);
+        $usuariosPorSexo = $this->model->getCantidadUsuariosPorSexo($fecha_inicio, $fecha_fin);
+        $usuariosPorGrupoEdad = $this->model->getCantidadUsuariosPorGrupoEdad($fecha_inicio, $fecha_fin);
+
+        // Incluir el archivo de ayuda
+        require_once 'helper\adminDashboard.php';
+
+        // Crear un nuevo documento PDF
+        $pdf = new PdfHelper();
+
+        // Agregar una página
+        $pdf->AddPage();
+
+        // Establecer la fuente
+        $pdf->SetFont('Arial', 'B', 12);
+
+        // Agregar la cabecera de la tabla
+        $pdf->Cell(42, 10, 'Total de Jugadores:');
+        $pdf->Cell(60, 10, $cantidadJugadores);
+        $pdf->Ln();
+        $pdf->Cell(37, 10, 'Total de Partidas:');
+        $pdf->Cell(60, 10, $cantidadPartidas);
+        $pdf->Ln();
+        $pdf->Cell(41, 10, 'Total de Preguntas:');
+        $pdf->Cell(60, 10, $cantidadPreguntas);
+        $pdf->Ln();
+        $pdf->Cell(60, 10, 'Total de Preguntas Creadas:');
+        $pdf->Cell(60, 10, $cantidadPreguntasCreadas);
+        $pdf->Ln();
+
+        $pdf->Cell(35, 10, 'Usuarios por Pais:');
+        $pdf->Ln();
+        $pdf->SetFont('Arial', 'B', 9);
+
+
+        foreach ($usuariosPorPais as $pais) {
+            $pdf->Cell(60, 10, $pais['COUNTRY'] . ': ' . $pais['total_usuarios']);
+            $pdf->Ln();
+        }
+
+        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->Cell(35, 10, 'Usuarios por Sexo:');
+        $pdf->Ln();
+        $pdf->SetFont('Arial', 'B', 9);
+
+
+        foreach ($usuariosPorSexo as $sexo) {
+            $pdf->Cell(60, 10, $sexo['GENDER'] . ': ' . $sexo['total_usuarios']);
+            $pdf->Ln();
+        }
+
+        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->Cell(35, 10, 'Usuarios por Grupo de Edad:');
+        $pdf->Ln();
+        $pdf->SetFont('Arial', 'B', 9);
+
+
+        foreach ($usuariosPorGrupoEdad as $grupoEdad) {
+            $pdf->Cell(60, 10, $grupoEdad['grupo_edad'] . ': ' . $grupoEdad['total_usuarios']);
+            $pdf->Ln();
+        }
+
+
+        // Enviar el documento PDF al navegador
+        $pdf->Output();
+    }
+
+    public function exportarUsuariosNuevos(){
+        $fecha_inicio = $_SESSION['fecha_inicio'];
+        $fecha_fin = $_SESSION['fecha_fin'];
+
+        $cantidadUsuariosNuevos = $this->model->getCantidadUsuariosNuevos($fecha_inicio, $fecha_fin);
+
+        // Incluir el archivo de ayuda
+        require_once 'helper/usuariosNuevos.php';
+
+        // Crear un nuevo documento PDF
+        $pdf = new PdfHelper();
+
+        // Agregar una página
+        $pdf->AddPage();
+
+        // Establecer la fuente
+        $pdf->SetFont('Arial', 'B', 12);
+
+        // Agregar la cabecera de la tabla
+        $pdf->Cell(60, 10, 'Total de Usuarios Nuevos:');
+        $pdf->Cell(60, 10, $cantidadUsuariosNuevos);
+        $pdf->Ln();
+
+        // Enviar el documento PDF al navegador
+        $pdf->Output();
+    }
 }
