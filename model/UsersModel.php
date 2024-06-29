@@ -191,5 +191,16 @@ class UsersModel
         return $this->database->execute($stmt);
     }
 
+    public function getPrintTotalUsersByGenre()
+    {
+        $query = "SELECT GENDER, COUNT(*) AS total_usuarios
+              FROM USUARIOS WHERE ROL =3
+               ";
+
+        $query .= " GROUP BY GENDER";
+
+        return $this->database->print($query);
+    }
+
 }
 ?>

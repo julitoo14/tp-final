@@ -318,4 +318,126 @@ class UsersController
         // Enviar el documento PDF al navegador
         $pdf->Output();
     }
+
+    public function adminGraficos()
+    {
+        $finit = $_SESSION['fecha_inicio'];
+        $fend = $_SESSION['fecha_fin'];
+        $data = $this->getStatisticsForUsers($finit, $fend);
+
+        // Obtén los datos de género de los usuarios
+        $dataGenero = $data['usuariosPorSexo'];
+        $dataCountry=$data['usuariosPorPais'];
+        $dataAge=$data['usuariosPorEdad'];
+        $data["imagePathGenre"]= $this->graficoUserByGenre($dataGenero);
+        $data["imagePathCountry"]=$this->graficoUserByCountry($dataCountry);
+        $data["imagePathAge"]=$this->graficoUserByAge($dataAge);
+        $this->presenter->render("view/graficoView.mustache", $data);
+    }
+    private function graficoUserByAge($dataAge)
+    {
+        require_once('vendor/jpgraph/src/jpgraph.php');
+        require_once('vendor/jpgraph/src/jpgraph_pie.php');
+
+        $graph = new PieGraph(350, 250);
+
+        $graph->title->Set("Usuarios por Edad");
+        $graph->SetBox(true);
+
+        $values = array_column($dataAge, 'total_usuarios');
+        $labels = array_column($dataAge, 'grupo_edad');
+
+        $p1 = new PiePlot($values);
+        $p1->SetLegends($labels);
+        $p1->ShowBorder();
+        $p1->SetColor('black');
+        $p1->SetSliceColors(array('#1E90FF', '#2E8B57', '#ADFF2F', '#DC143C', '#BA55D3'));
+
+        $graph->Add($p1);
+
+        $uniqueName = 'age_' . date('YmdHis') . '.png';
+        $imagePath = 'public/images/' . $uniqueName;
+
+        $graph->Stroke($imagePath);
+        if (!file_exists($imagePath)) {
+            $graph->Stroke($imagePath);
+        }
+
+        return $imagePath;
+    }
+    private function graficoUserByCountry($dataCountry)
+    {
+        require_once('vendor/jpgraph/src/jpgraph.php');
+        require_once('vendor/jpgraph/src/jpgraph_pie.php');
+
+        $graph = new PieGraph(350, 250);
+
+        $graph->title->Set("Usuarios por País");
+        $graph->SetBox(true);
+
+        $values = array_column($dataCountry, 'total_usuarios');
+        $labels = array_column($dataCountry, 'COUNTRY');
+
+        $p1 = new PiePlot($values);
+        $p1->SetLegends($labels);
+        $p1->ShowBorder();
+        $p1->SetColor('black');
+        $p1->SetSliceColors(array('#1E90FF', '#2E8B57', '#ADFF2F', '#DC143C', '#BA55D3'));
+
+        $graph->Add($p1);
+
+        $uniqueName = 'country_' . date('YmdHis') . '.png';
+        $imagePath = 'public/images/' . $uniqueName;
+
+        $graph->Stroke($imagePath);
+        if (!file_exists($imagePath)) {
+            $graph->Stroke($imagePath);
+        }
+
+        return $imagePath;
+    }
+    private function graficoUserByGenre($dataGenero)
+    {
+        require_once('vendor/jpgraph/src/jpgraph.php');
+        require_once('vendor/jpgraph/src/jpgraph_pie.php');
+
+        $graph = new PieGraph(350, 250);
+
+        $graph->title->Set("Usuarios por género");
+        $graph->SetBox(true);
+
+        $values = array_column($dataGenero, 'total_usuarios');
+        $labels = array_column($dataGenero, 'GENDER');
+
+        $p1 = new PiePlot($values);
+        $p1->SetLegends($labels);
+        $p1->ShowBorder();
+        $p1->SetColor('black');
+        $p1->SetSliceColors(array('#1E90FF', '#2E8B57', '#ADFF2F', '#DC143C', '#BA55D3'));
+
+        $graph->Add($p1);
+
+        $uniqueName = 'genre_' . date('YmdHis') . '.png';
+        $imagePath = 'public/images/' . $uniqueName;
+
+        $graph->Stroke($imagePath);
+        if (!file_exists($imagePath)) {
+            $graph->Stroke($imagePath);
+        }
+
+        return $imagePath;
+    }
+
+    private function getStatisticsForUsers($finit, $fend)
+    {
+        $data = array(
+            'usuariosPorEdad' => $this->model->getCantidadUsuariosPorGrupoEdad($finit, $fend),
+            'usuariosPorSexo' => $this->model->getCantidadUsuariosPorSexo($finit, $fend),
+            'usuariosPorPais' => $this->model->getCantidadUsuariosPorPais($finit, $fend)
+        );
+        if (empty($data['usuariosPorEdad']) && empty($data['usuariosPorSexo']) && empty($data['usuariosPorPais'])) {
+            $data['empty'] = true;
+        }
+        return $data;
+    }
 }
