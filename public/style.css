@@ -243,3 +243,15 @@ a-href{
     text-align: right;
 }
 
+@media (max-width: 750px) {
+    #perdistee {
+        width: 80%;
+        margin: 0 auto;
+    }
+
+    #contenedorPregunta{
+        width: 80%;
+        margin: 0 auto;
+    }
+
+}
