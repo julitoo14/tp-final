@@ -76,15 +76,10 @@ class UsersController
     public function validateEmail() {
         if (isset($_GET['hash'])) {
             $hash = $_GET['hash'];
-            if ($this->model->setEmailValidated($hash)) {
-                $data = array("message" => "Su correo ha sido validado exitosamente.");
-            } else {
-                $data = array("message" => "No se ha podido validar el correo.");
+            $this->model->setEmailValidated($hash);
+            $data = array("message" => "Su correo ha sido validado exitosamente.");
             }
-        } else {
-            $data = array("message" => "No se ha proporcionado un hash válido.");
-        }
-        $this->presenter->render("view/RegisterSuccessView.mustache", $data);
+        $this->presenter->render("view/LoginView.mustache", $data);
     }
 
     public function postLogin()  // Procesar el login
@@ -136,8 +131,6 @@ class UsersController
         $usuariosPorPais = $this->model->getCantidadUsuariosPorPais($fecha_inicio, $fecha_fin);
         $usuariosPorSexo = $this->model->getCantidadUsuariosPorSexo($fecha_inicio, $fecha_fin);
         $usuariosPorGrupoEdad = $this->model->getCantidadUsuariosPorGrupoEdad($fecha_inicio, $fecha_fin);
-
-        // Aquí se obtiene la lista de jugadores
 
         // Renderizar la vista del panel de administración con los datos obtenidos
         $this->presenter->render("view/AdminDashboardView.mustache", [

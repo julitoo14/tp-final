@@ -49,19 +49,19 @@ class UsersModel
             $mail->isSMTP();
             $mail->Host =  "smtp.gmail.com";
             $mail->SMTPAuth = true;
-            $mail->Username = "marty4009@gmail.com";
-            $mail->Password = "arvn vyho rjoi njwe";
+            $mail->Username = "ivonecorletol@gmail.com";
+            $mail->Password = "sgyz rtsx neeo yqro";
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port =587;
 
             // Remitente y destinatarios
-            $mail->setFrom("marty4009@gmail.com", "QuizArg");
+            $mail->setFrom("ivonecorletol@gmail.com", "QuizArg");
             $mail->addAddress($email);
 
             // Contenido del correo
             $mail->isHTML(true);
             $mail->Subject = 'Validación de correo electrónico';
-            $mail->Body    = 'Haz clic en el siguiente enlace para validar tu correo electrónico: <a href="http://localhost/tp-final/Users/validateEmail?hash=' . $hash . '">Validar Email</a>';
+            $mail->Body    = 'Haz clic en el siguiente enlace para validar tu correo electrónico: <a href="http://localhost/Users/validateEmail?hash=' . $hash . '">Validar Email</a>';
 
             $mail->send();
             return true;
