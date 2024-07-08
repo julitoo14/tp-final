@@ -86,15 +86,22 @@ class UsersController
     {
         $usernameOrEmail = $_POST['username'];
         $password = $_POST['password'];
-        $user = $this->model->login($usernameOrEmail, $password);
+        $emailValidado = $this->model->getEmailValidado($usernameOrEmail);
 
-        if ($user) {
-            $_SESSION['user'] = $user;
-            $username = isset($_SESSION['user']) && is_array($_SESSION['user']) ? $_SESSION['user'][0]['username'] : null;
-            header("Location: /Home");
-        } else {
-            $_SESSION['error'] = "Usuario o contraseña incorrectos";
+        if ($emailValidado != 1) {
+            $_SESSION['error'] = "Debe validar su correo electrónico para poder iniciar sesión";
             $this->presenter->render("view/LoginView.mustache", ['error' => $_SESSION['error']]);
+        } else {
+            $user = $this->model->login($usernameOrEmail, $password);
+
+            if ($user) {
+                $_SESSION['user'] = $user;
+                $username = isset($_SESSION['user']) && is_array($_SESSION['user']) ? $_SESSION['user'][0]['username'] : null;
+                header("Location: /Home");
+            } else {
+                $_SESSION['error'] = "Usuario o contraseña incorrectos";
+                $this->presenter->render("view/LoginView.mustache", ['error' => $_SESSION['error']]);
+            }
         }
     }
 

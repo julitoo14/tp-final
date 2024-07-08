@@ -247,6 +247,12 @@ class UsersModel
         return $this->database->print($query);
     }
 
+    public function getEmailValidado($username)
+    {
+        $stmt = $this->database->prepare("SELECT EMAIL_VALIDATED FROM USUARIOS WHERE USERNAME = ?");
+        return $this->database->execute($stmt, ["s", $username])[0]['EMAIL_VALIDATED'];
+    }
+
 }
 ?>
 
