@@ -17,6 +17,14 @@ class GameController
 
     public function getQuestion()
     {
+        $roleId = isset($_SESSION['user']) ? $_SESSION['user'][0]['rol'] : null;
+
+        if ($roleId !== 3) {
+            // Redirigir a la página de inicio de sesión si no se tiene el rol adecuado
+            header("Location: /Home");
+            exit();
+        }
+
         $userId = isset($_SESSION['user']) ? $_SESSION['user'][0]['_id'] : null;
         $partidaId = $_SESSION['partidaId'];
         $puntos = $this->partidasModel->getPuntaje($partidaId);
@@ -63,6 +71,15 @@ class GameController
 
     public function startGame()
     {
+
+        $roleId = isset($_SESSION['user']) ? $_SESSION['user'][0]['rol'] : null;
+
+
+        if ($roleId !== 3) {
+            // Redirigir a la página de inicio de sesión si no se tiene el rol adecuado
+            header("Location: /Home");
+            exit();
+        }
         $userId = isset($_SESSION['user']) ? $_SESSION['user'][0]['_id'] : null;
         $partidaId = $this->partidasModel->addPartida($userId);
         $_SESSION['partidaId'] = $partidaId;
@@ -140,7 +157,17 @@ class GameController
 
 
     public function endGame()
+
     {
+        $roleId = isset($_SESSION['user']) ? $_SESSION['user'][0]['rol'] : null;
+
+
+        if ($roleId !== 3) {
+            // Redirigir a la página de inicio de sesión si no se tiene el rol adecuado
+            header("Location: /Home");
+            exit();
+        }
+
         $partidaId = $_SESSION['partidaId'];
         $puntos = $this->partidasModel->getPuntaje($partidaId);
         $puntos = $puntos[0]['puntaje'];

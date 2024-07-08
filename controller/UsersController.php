@@ -117,6 +117,14 @@ class UsersController
     public function getAdminDashboard()
     {
 
+        $roleId = isset($_SESSION['user']) ? $_SESSION['user'][0]['rol'] : null;
+
+        if ($roleId!== 2) {
+            // Redirigir a la página de inicio de sesión si no se tiene el rol adecuado
+            header("Location: /Home");
+            exit();
+        }
+
         // Obtener las fechas desde la solicitud GET
         $fecha_inicio = $_GET['fecha_inicio'];
         $fecha_fin = $_GET['fecha_fin'];
@@ -147,6 +155,14 @@ class UsersController
 
     public function getUsuariosNuevos()
     {
+        $roleId = isset($_SESSION['user']) ? $_SESSION['user'][0]['rol'] : null;
+
+        if ($roleId!== 2) {
+            // Redirigir a la página de inicio de sesión si no se tiene el rol adecuado
+            header("Location: /Home");
+            exit();
+        }
+
         // Obtener las fechas desde la solicitud GET
         $fecha_inicio = $_GET['fecha_inicio'];
         $fecha_fin = $_GET['fecha_fin'];
@@ -174,6 +190,14 @@ class UsersController
     }
 
     public function exportarPorcentajeAciertos() {
+
+        $roleId = isset($_SESSION['user']) ? $_SESSION['user'][0]['rol'] : null;
+
+        if ($roleId!== 2) {
+            // Redirigir a la página de inicio de sesión si no se tiene el rol adecuado
+            header("Location: /Home");
+            exit();
+        }
 
         $fecha_inicio = $_SESSION['fecha_inicio'];
         $fecha_fin = $_SESSION['fecha_fin'];
@@ -215,6 +239,14 @@ class UsersController
     }
 
     public function exportarAdminDashboard() {
+
+        $roleId = isset($_SESSION['user']) ? $_SESSION['user'][0]['rol'] : null;
+
+        if ($roleId!== 2) {
+            // Redirigir a la página de inicio de sesión si no se tiene el rol adecuado
+            header("Location: /Home");
+            exit();
+        }
 
         $fecha_inicio = $_SESSION['fecha_inicio'];
         $fecha_fin = $_SESSION['fecha_fin'];
@@ -291,6 +323,15 @@ class UsersController
     }
 
     public function exportarUsuariosNuevos(){
+
+        $roleId = isset($_SESSION['user']) ? $_SESSION['user'][0]['rol'] : null;
+
+        if ($roleId!== 2) {
+            // Redirigir a la página de inicio de sesión si no se tiene el rol adecuado
+            header("Location: /Home");
+            exit();
+        }
+
         $fecha_inicio = $_SESSION['fecha_inicio'];
         $fecha_fin = $_SESSION['fecha_fin'];
 
@@ -319,6 +360,15 @@ class UsersController
 
     public function adminGraficos()
     {
+
+        $roleId = isset($_SESSION['user']) ? $_SESSION['user'][0]['rol'] : null;
+
+        if ($roleId!== 2) {
+            // Redirigir a la página de inicio de sesión si no se tiene el rol adecuado
+            header("Location: /Home");
+            exit();
+        }
+
         $finit = $_SESSION['fecha_inicio'];
         $fend = $_SESSION['fecha_fin'];
         $data = $this->getStatisticsForUsers($finit, $fend);
@@ -365,6 +415,7 @@ class UsersController
     }
     private function graficoUserByCountry($dataCountry)
     {
+
         require_once('vendor/jpgraph/src/jpgraph.php');
         require_once('vendor/jpgraph/src/jpgraph_pie.php');
 
@@ -396,6 +447,7 @@ class UsersController
     }
     private function graficoUserByGenre($dataGenero)
     {
+
         require_once('vendor/jpgraph/src/jpgraph.php');
         require_once('vendor/jpgraph/src/jpgraph_pie.php');
 
