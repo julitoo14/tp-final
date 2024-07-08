@@ -1,5 +1,10 @@
 <?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
+require 'vendor/PHPMailer/src/Exception.php';
+require 'vendor/PHPMailer/src/PHPMailer.php';
+require 'vendor/PHPMailer/src/SMTP.php';
 class UsersController
 {
 
@@ -51,35 +56,30 @@ class UsersController
             exit();
         }
 
-        if ($this->model->register($username, $password, $rep_password, $email, $name, $surname, $hash, $contenidoProfilePic, $birth_year, $gender, $country, $city, $latitude, $longitude)) {
-            $user = $this->model->getUserByUsername($username);
-            $id = $user[0]['_id'];
+        $result = $this->model->register($username, $password, $rep_password, $email, $name, $surname, $hash, $contenidoProfilePic, $birth_year, $gender, $country, $city, $latitude, $longitude);
+
+        if ($result) {
             $hash = md5($username . $email . date("Y-m-d"));
-            $link = "/Users/validateEmail?id=" . $id . "&hash=" . $hash;
-            $this->presenter->render("view/RegisterSuccessView.mustache", ['link' => $link]);
+            if ($this->model->sendEmail($email, $username, $hash)) {
+                $this->presenter->render("view/RegisterSuccessView.mustache", ['link' => '/Users/validateEmail?hash=' . $hash]);
+            } else {
+                $_SESSION['error'] = "Error al enviar el correo de validación";
+                $this->presenter->render("view/RegisterView.mustache", ['error' => $_SESSION['error']]);
+            }
         } else {
             $_SESSION['error'] = "Ocurrió un error al registrar al usuario";
-            $this->presenter->render("view/RegisterView.mustache", ['error' => $_SESSION['error']]); // Redirige de vuelta al formulario en caso de error
+            $this->presenter->render("view/RegisterView.mustache", ['error' => $_SESSION['error']]);
             exit();
         }
     }
 
-    public function validateEmail()  // Validar el correo electrónico
-    {
-        $userId = $_GET['id'];
-        $validationCode = $_GET['hash'];
-
-        $user = $this->model->getUserById($userId);
-
-        if ($user && $user[0]['hash'] == $validationCode) {
-            // El código de validación coincide, marcar el correo electrónico como validado
-            $this->model->setEmailValidated($userId);
-            $_SESSION['message'] = "Correo electrónico validado correctamente";
-            $this->presenter->render("view/LoginView.mustache", ['message' => $_SESSION['message']]);
-
-        } else {
-            echo "El código de validación no coincide";
-        }
+    public function validateEmail() {
+        if (isset($_GET['hash'])) {
+            $hash = $_GET['hash'];
+            $this->model->setEmailValidated($hash);
+            $data = array("message" => "Su correo ha sido validado exitosamente.");
+            }
+        $this->presenter->render("view/LoginView.mustache", $data);
     }
 
     public function postLogin()  // Procesar el login
@@ -131,8 +131,6 @@ class UsersController
         $usuariosPorPais = $this->model->getCantidadUsuariosPorPais($fecha_inicio, $fecha_fin);
         $usuariosPorSexo = $this->model->getCantidadUsuariosPorSexo($fecha_inicio, $fecha_fin);
         $usuariosPorGrupoEdad = $this->model->getCantidadUsuariosPorGrupoEdad($fecha_inicio, $fecha_fin);
-
-        // Aquí se obtiene la lista de jugadores
 
         // Renderizar la vista del panel de administración con los datos obtenidos
         $this->presenter->render("view/AdminDashboardView.mustache", [

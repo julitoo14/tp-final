@@ -1,4 +1,12 @@
 <?php
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+// Ajusta las rutas según la estructura de tu proyecto
+require_once __DIR__ . '/../vendor/PHPMailer/src/Exception.php';
+require_once __DIR__ . '/../vendor/PHPMailer/src/PHPMailer.php';
+require_once __DIR__ . '/../vendor/PHPMailer/src/SMTP.php';
 class UsersModel
 {
     private $database;
@@ -29,6 +37,49 @@ class UsersModel
         $stmt = $this->database->prepare("INSERT INTO `USUARIOS`(`USERNAME`, `PASSWORD`, `EMAIL`, `NAME`, `SURNAME`,`HASH`,`PROFILE_PIC`,`BIRTH_YEAR`, `GENDER`, `COUNTRY`, `CITY`, `LATITUDE`, `LONGITUDE`, `ROL`, `fecha_creacion`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
         $this->database->execute($stmt, ["sssssssisssddi", $username, $password, $email, $name, $surname, $hash, $profile_pic, $birth_year, $gender, $country, $city, $latitude, $longitude, $roleId]);
         return true;
+    }
+
+    public function sendEmail($email, $username, $hash) {
+
+        //$config = json_decode(file_get_contents('config/email_config.json'), true);
+
+        $mail = new PHPMailer(true);
+        try {
+            // Configuración del servidor
+            $mail->isSMTP();
+            $mail->Host =  "smtp.gmail.com";
+            $mail->SMTPAuth = true;
+            $mail->Username = "ivonecorletol@gmail.com";
+            $mail->Password = "sgyz rtsx neeo yqro";
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port =587;
+
+            // Remitente y destinatarios
+            $mail->setFrom("ivonecorletol@gmail.com", "QuizArg");
+            $mail->addAddress($email);
+
+            // Contenido del correo
+            $mail->isHTML(true);
+            $mail->Subject = 'Validación de correo electrónico';
+            $mail->Body    = 'Haz clic en el siguiente enlace para validar tu correo electrónico: <a href="http://localhost/Users/validateEmail?hash=' . $hash . '">Validar Email</a>';
+
+            $mail->send();
+            return true;
+        } catch (Exception $e) {
+            $_SESSION['error'] = "El correo no pudo ser enviado. Mailer Error: {$mail->ErrorInfo}";
+            return false;
+        }
+    }
+
+    public function setEmailValidated($hash)
+    {
+        $stmt = $this->database->prepare("UPDATE USUARIOS SET EMAIL_VALIDATED = 1 WHERE HASH = ?");
+        $this->database->execute($stmt, ["i", $hash]);
+    }
+
+    private function getEmailConfig() {
+        $config = json_decode(file_get_contents(__DIR__ . '/../config/email_config.json'), true);
+        return $config;
     }
 
     public function login($usernameOrEmail, $password)
@@ -82,12 +133,6 @@ class UsersModel
         $stmt = $this->database->prepare("SELECT * FROM USUARIOS WHERE USERNAME = ? OR EMAIL = ?");
         $result = $this->database->execute($stmt, ["ss", $username, $email]);
         return !empty($result);
-    }
-
-    public function setEmailValidated($userId)
-    {
-        $stmt = $this->database->prepare("UPDATE USUARIOS SET EMAIL_VALIDATED = 1 WHERE _ID = ?");
-        $this->database->execute($stmt, ["i", $userId]);
     }
 
     public function getUserByUsername($username)
@@ -204,3 +249,4 @@ class UsersModel
 
 }
 ?>
+
