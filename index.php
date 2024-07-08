@@ -18,6 +18,8 @@ if (!isset($_SESSION['user']) && $controllerName != "Users") {
 
 $router = Configuration::getRouter();
 $router->route($controllerName, $actionName);
+var_dump($_SESSION);
+
 
 // index.php?controller=tours&action=get
 // tours/get

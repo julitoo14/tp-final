@@ -14,6 +14,14 @@ class PreguntasController
     public function getCrearPregunta()
     {
 
+        $roleId = isset($_SESSION['user']) ? $_SESSION['user'][0]['rol'] : null;
+
+        if ($roleId!== 3 && $roleId!== 1) {
+            // Redirigir a la página de inicio de sesión si no se tiene el rol adecuado
+            header("Location: /Home");
+            exit();
+        }
+
         $this->presenter->render("view/CrearPreguntaView.mustache");
 
     }
@@ -52,6 +60,13 @@ class PreguntasController
 
     public function getPreguntasAceptadas()
     {
+        $roleId = isset($_SESSION['user']) ? $_SESSION['user'][0]['rol'] : null;
+
+        if ($roleId!== 1) {
+            // Redirigir a la página de inicio de sesión si no se tiene el rol adecuado
+            header("Location: /Home");
+            exit();
+        }
         $username = isset($_SESSION['user']) ? $_SESSION['user'][0]['username'] : null;
         $data = [
             'username' => $username,
@@ -64,6 +79,14 @@ class PreguntasController
 
     public function getPreguntasReportadas()
     {
+        $roleId = isset($_SESSION['user']) ? $_SESSION['user'][0]['rol'] : null;
+
+        if ($roleId!== 1) {
+            // Redirigir a la página de inicio de sesión si no se tiene el rol adecuado
+            header("Location: /Home");
+            exit();
+        }
+
         $username = isset($_SESSION['user']) ? $_SESSION['user'][0]['username'] : null;
         $data = [
             'username' => $username,
@@ -76,6 +99,13 @@ class PreguntasController
 
     public function getPreguntasSugeridas()
     {
+        $roleId = isset($_SESSION['user']) ? $_SESSION['user'][0]['rol'] : null;
+
+        if ($roleId!== 1) {
+            // Redirigir a la página de inicio de sesión si no se tiene el rol adecuado
+            header("Location: /Home");
+            exit();
+        }
         $username = isset($_SESSION['user']) ? $_SESSION['user'][0]['username'] : null;
         $data = [
             'username' => $username,
@@ -116,6 +146,13 @@ class PreguntasController
 
     public function aceptar()
     {
+        $roleId = isset($_SESSION['user']) ? $_SESSION['user'][0]['rol'] : null;
+
+        if ($roleId!== 1) {
+            // Redirigir a la página de inicio de sesión si no se tiene el rol adecuado
+            header("Location: /Home");
+            exit();
+        }
         $id = $_POST["id"];
         $idEstado = $this->preguntasModel->getPregunta($id);
         $this->preguntasModel->aceptarPregunta($id);
@@ -123,6 +160,15 @@ class PreguntasController
     }
 
     public function irAEditarPregunta(){
+
+        $roleId = isset($_SESSION['user']) ? $_SESSION['user'][0]['rol'] : null;
+
+        if ($roleId!== 1) {
+            // Redirigir a la página de inicio de sesión si no se tiene el rol adecuado
+            header("Location: /Home");
+            exit();
+        }
+
         $id = $_POST["id"];
         $username = isset($_SESSION['user']) ? $_SESSION['user'][0]['username'] : null;
         $data = [
@@ -137,6 +183,15 @@ class PreguntasController
     }
 
     public function editar(){
+
+        $roleId = isset($_SESSION['user']) ? $_SESSION['user'][0]['rol'] : null;
+
+        if ($roleId!== 1) {
+            // Redirigir a la página de inicio de sesión si no se tiene el rol adecuado
+            header("Location: /Home");
+            exit();
+        }
+
         $requiredParams = ['id', 'descripcion', 'id_categoria', 'opcionA', 'opcionB', 'opcionC', 'opcionD', 'resp_correcta'];
 
         foreach ($requiredParams as $param) {

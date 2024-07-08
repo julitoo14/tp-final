@@ -14,6 +14,7 @@ class UsuarioPerfilController {
         $this->partidasModel = $partidasModel;
     }
     public function getProfile() {
+
         $username = $_GET['username'];
         // Buscar los datos del usuario basándote en el nombre de usuario
         $user = $this->usersModel->getUserByUsername($username);
